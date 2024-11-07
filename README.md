@@ -23,11 +23,12 @@
 ## Groupe
 
 - Étudiants:
-	- [Ango Morgane Claudel](https://github.com/Morgan-sama)
-	- [Julien Constant](https://github.com/Juknum)
+	- [Hajar Adnani](https://github.com/adnanihajar)
+	- [Mahmoud Asbane](https://github.com/Asbane-Mahmoud)
 	- [Mouad Boufenzi](https://github.com/mouadboufenzi)
+	- [Julien Constant](https://github.com/Juknum)
+	- [Ango Morgane Claudel](https://github.com/Morgan-sama)
 	- [Karim El Jardali](https://github.com/Karimjardali)
-	- Hajar Adnani
 
 - Encadrant:
 	- Stéphane Galland
