@@ -1,4 +1,4 @@
-package com.filegenie.filegeniebackend.Entities;
+package com.filegenie.backend.Entities;
 
 
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "valeurs")
-public class Values {
+public class Value {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
