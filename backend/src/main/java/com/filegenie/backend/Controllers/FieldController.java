@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(path="/field")
+@RequestMapping(path="/api/field")
 public class FieldController {
     @Autowired
     private FieldRepository fieldRepository;
