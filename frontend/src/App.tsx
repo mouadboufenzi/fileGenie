@@ -1,11 +1,6 @@
+import LoginPage from "./pages/auth/Login";
 
-/**
- * Main App component
- */
-function App() {
-  return (
-    <>Hello World</>
-  )
+export default function App() {
+	// TODO: add a login verification here, if not logged in, redirect to /login
+	return <LoginPage />
 }
-
-export default App
