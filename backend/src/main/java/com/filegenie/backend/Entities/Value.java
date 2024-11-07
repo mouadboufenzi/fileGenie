@@ -1,4 +1,4 @@
-package com.filegenie.filegeniebackend.Entities;
+package com.filegenie.backend.Entities;
 
 
 import jakarta.persistence.*;

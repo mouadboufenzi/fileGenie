@@ -1,7 +1,7 @@
-package com.filegenie.filegeniebackend.Controllers;
+package com.filegenie.backend.Controllers;
 
-import com.filegenie.filegeniebackend.Entities.Field;
-import com.filegenie.filegeniebackend.Repositories.FieldRepository;
+import com.filegenie.backend.Repositories.FieldRepository;
+import com.filegenie.backend.Entities.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +28,4 @@ public class FieldController {
     public @ResponseBody Iterable<Field> getAllFields() {
         return fieldRepository.findAll();
     }
-
 }
