@@ -1,6 +1,7 @@
 package com.filegenie.backend.Filters;
 
 import com.filegenie.backend.Entities.UserSession;
+import com.filegenie.backend.DTO.ErrorResponse;
 import com.filegenie.backend.Repositories.UserSessionRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -47,12 +48,12 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         if (authHeader == null) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.getWriter().write("Unauthorized: Missing session token");
+            ErrorResponse error = new ErrorResponse(HttpServletResponse.SC_FORBIDDEN, "Forbidden: Missing session token");
+            error.sendErrorResponse(res);
             return;
         }
 
-        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        res.getWriter().write("Unauthorized: Invalid or expired session token");
+        ErrorResponse error = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid or expired session token");
+        error.sendErrorResponse(res);
     }
 }

@@ -52,4 +52,17 @@ public class UserService {
 
         throw new RuntimeException("Invalid email or password");
     }
+
+    public User getAuthedUser(String token) {
+        String clearedToken = token.startsWith("Bearer ") ? token.substring(7) : token;
+        Optional<UserSession> sessionOpt = userSessionRepository.findBySessionToken(clearedToken);
+
+        // Token expired/invalid
+        // => Should never happen as the AuthFilter disallow requests to invalid/expired tokens
+        if (sessionOpt.isEmpty() || sessionOpt.get().getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("User not found or token invalid");
+        }
+
+        return sessionOpt.get().getUser();
+    }
 }
