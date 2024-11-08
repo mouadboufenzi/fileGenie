@@ -5,10 +5,12 @@ import com.filegenie.backend.DTO.LoginRequest;
 import com.filegenie.backend.DTO.LoginResponse;
 import com.filegenie.backend.DTO.RegisterRequest;
 import com.filegenie.backend.Services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Authentication")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
