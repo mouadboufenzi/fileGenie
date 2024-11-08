@@ -1,6 +1,11 @@
+import { useLocalStorage } from '@mantine/hooks';
+
 import LoginPage from './auth/login';
+import Home from './home/home';
 
 export default function App() {
-  // TODO: add a login verification here, if not logged in, redirect to /login
+  const [token] = useLocalStorage({ key: 'token', defaultValue: '' });
+
+  if (token) return <Home />;
   return <LoginPage />;
 }
