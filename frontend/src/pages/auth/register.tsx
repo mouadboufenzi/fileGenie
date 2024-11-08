@@ -17,7 +17,7 @@ export default function RegisterPage() {
       align="center"
     >
       <Image src="/icon.png" w="120" />
-      <Title>Inscription</Title>
+      <Title ff="Archivo">Inscription</Title>
 
       <Stack w="100%" >
         <TextInput

@@ -10,6 +10,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { theme } from './theme.ts';
 import { router } from './router.tsx';
+import { Layout } from './components/layout.tsx';
 
 /** 
  * This is the entry point for the frontend application. 
@@ -21,7 +22,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider theme={theme}>
       <Notifications />
-      <RouterProvider router={router} />
+      <Layout>
+        <RouterProvider router={router} />
+      </Layout>
     </MantineProvider>
   </StrictMode>,
 );

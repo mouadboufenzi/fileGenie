@@ -4,7 +4,7 @@ export default function Error404() {
   return (
     <Stack 
       maw="700" ml="auto" mr="auto"
-      h="100vh"
+      h="calc(100vh - 50px - var(--mantine-spacing-md))"
       justify="center"
       align="center"
     >

@@ -68,7 +68,7 @@ export default function LoginPage() {
         align="center"
       >
         <Image src="/icon.png" w="120" />
-        <Title>Connexion</Title>
+        <Title ff="Archivo">Connexion</Title>
 
         <Stack w="100%">
           <TextInput
