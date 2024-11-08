@@ -1,13 +1,13 @@
-import "@mantine/core/styles.css";
-import './assets/index.css'
+import '@mantine/core/styles.css';
+import './assets/index.css';
 
-import { MantineProvider } from '@mantine/core'
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { MantineProvider } from '@mantine/core';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider } from 'react-router-dom';
 
-import { theme } from './theme.ts'
-import { router } from "./router.tsx";
+import { theme } from './theme.ts';
+import { router } from './router.tsx';
 
 /** 
  * This is the entry point for the frontend application. 
@@ -21,4 +21,4 @@ createRoot(document.getElementById('root')!).render(
       <RouterProvider router={router} />
     </MantineProvider>
   </StrictMode>,
-)
+);

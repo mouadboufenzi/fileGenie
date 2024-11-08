@@ -1,6 +1,6 @@
-import LoginPage from "./auth/Login";
+import LoginPage from './auth/Login';
 
 export default function App() {
-	// TODO: add a login verification here, if not logged in, redirect to /login
-	return <LoginPage />
+  // TODO: add a login verification here, if not logged in, redirect to /login
+  return <LoginPage />;
 }
