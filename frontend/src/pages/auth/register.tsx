@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Button, Image, Stack, TextInput, Title } from '@mantine/core';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

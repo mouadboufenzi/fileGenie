@@ -26,6 +26,14 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 });
 
+Object.defineProperty(window, 'location', {
+  writable: true,
+  value: {
+    href: '',
+    assign: vi.fn(),
+  },
+});
+
 class ResizeObserver {
   observe() {}
   unobserve() {}

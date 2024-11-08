@@ -11,5 +11,4 @@ export function showNotification(message: string, success = true) {
     time: 2000,
     bg: 'dark'
   });
-
 }

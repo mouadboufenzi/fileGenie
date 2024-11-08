@@ -14,12 +14,19 @@ export function Layout({ children }: LayoutProps) {
     <Stack gap="md">
       <Card p={0} shadow="xs" radius={0}>
         <Group justify="space-between" p="xs">
-          <Group align="center" gap="xs" className="cursor-pointer" onClick={() => window.location.href = '/'}>
+          <Group 
+            align="center" 
+            gap="xs" 
+            className="cursor-pointer" 
+            onClick={() => window.location.href = '/'}
+            data-testid="logo"
+          >
             <Image src="/icon.png" h={30} />
             <Title order={3} lh="30px" ff="Archivo">FileGenie</Title>
           </Group>
 
-          <FaCircleUser 
+          <FaCircleUser
+            data-testid="profile-icon"
             size={25} 
             color="#999" 
             className="cursor-pointer"

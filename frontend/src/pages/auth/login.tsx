@@ -4,7 +4,7 @@ import { useLocalStorage } from '@mantine/hooks';
 import { useEffect, useTransition } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { HttpException } from '../../types/httpException';
+import type { HttpException } from '../../types/httpException';
 import { showNotification } from '../../utils/show-notification';
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!token) return;
 
-    showNotification('Vous êtes connecté', true);
+    showNotification('Vous êtes connecté');
     startTransition(() => {
       setTimeout(() => {
         navigate('/');
@@ -31,7 +31,7 @@ export default function LoginPage() {
     initialValues: { email: '', password: '', remember: false },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Email invalide'),
-      password: (value) => (value.length >= 2 ? null : 'Le mot de passe doit contenir au moins 8 caractères'),
+      password: (value) => (value.length >= 8 ? null : 'Le mot de passe doit contenir au moins 8 caractères'),
     }
   });
 
