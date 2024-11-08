@@ -1,13 +1,23 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from './pages/App.tsx';
-import Error404 from './pages/errors/Error404.tsx';
+import App from './pages/app.tsx';
+import Error404 from './pages/errors/error404.tsx';
+import Login from './pages/auth/login.tsx';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     errorElement: <Error404 />,
-    children: []
+    children: [
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/home',
+        element: <Home />,
+      }
+    ]
   }
 ]);
