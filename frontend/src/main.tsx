@@ -1,25 +1,13 @@
 import "@mantine/core/styles.css";
-import './index.css'
-
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import './assets/index.css'
 
 import { MantineProvider } from '@mantine/core'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { RouterProvider } from 'react-router-dom'
+
 import { theme } from './theme.ts'
-
-import App from './App.tsx'
-import Error404 from './pages/Error404.tsx'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <Error404 />,
-    children: []
-  }
-])
-
+import { router } from "./router.tsx";
 
 /** 
  * This is the entry point for the frontend application. 
