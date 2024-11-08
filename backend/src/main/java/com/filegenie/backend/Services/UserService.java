@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -28,13 +26,17 @@ public class UserService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public void registerUser(RegisterRequest req) {
+    public void registerUser(RegisterRequest req) throws HttpException {
         User user = new User();
         user.setEmail(req.getEmail());
         user.setPassword(encoder.encode(req.getPassword()));
         user.setName(req.getName());
         user.setRole(User.Role.USER);
-        userRepository.save(user);
+
+        try {
+            userRepository.save(user);
+        } catch (Exception exception) {
+            throw new HttpException(HttpStatus.UNAUTHORIZED, "Email déjà utilisé");
     }
 
     /**

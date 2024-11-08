@@ -16,12 +16,15 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse> registerUser(@RequestBody RegisterRequest req) {
-        userService.registerUser(req);
-        GenericResponse response = new GenericResponse();
-        response.setMessage("User registered");
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest req) {
+        try {
+            userService.registerUser(req);
+            GenericResponse response = new GenericResponse();
+            response.setMessage("User registered");
+            return ResponseEntity.ok(response);
+        } catch (HttpException unauthorized) {
+            return new ResponseEntity<>(unauthorized, unauthorized.getStatus());
+        }
     }
 
     @PostMapping("/login")
@@ -31,7 +34,7 @@ public class AuthController {
         try {
             sessionToken = userService.loginUser(req);
         } catch (HttpException notFoundException) {
-            return new ResponseEntity<>(notFoundException, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(notFoundException, notFoundException.getStatus());
         }
 
         LoginResponse response = new LoginResponse();
