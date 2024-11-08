@@ -37,6 +37,7 @@ public class UserService {
             userRepository.save(user);
         } catch (Exception exception) {
             throw new HttpException(HttpStatus.UNAUTHORIZED, "Email déjà utilisé");
+        }
     }
 
     /**
@@ -61,7 +62,7 @@ public class UserService {
             return session.getSessionToken();
         }
 
-        throw new HttpException(HttpStatus.NOT_FOUND, "User not found or invalid credential(s)");
+        throw new HttpException(HttpStatus.NOT_FOUND, "Identifiant invalide");
     }
 
     public User getAuthedUser(String token) throws HttpException {
@@ -71,7 +72,7 @@ public class UserService {
         // Token expired/invalid
         // => Should never happen as the AuthFilter disallow requests to invalid/expired tokens
         if (sessionOpt.isEmpty() || sessionOpt.get().getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new HttpException(HttpStatus.NOT_FOUND, "User not found or token invalid");
+            throw new HttpException(HttpStatus.NOT_FOUND, "Utilisateur introuvable / Jeton invalide");
         }
 
         return sessionOpt.get().getUser();

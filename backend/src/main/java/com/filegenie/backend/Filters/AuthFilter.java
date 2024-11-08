@@ -49,12 +49,12 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         if (authHeader == null) {
-            HttpException error = new HttpException(HttpStatus.FORBIDDEN, "Forbidden: Missing session token");
+            HttpException error = new HttpException(HttpStatus.FORBIDDEN, "Missing session token");
             error.sendErrorResponse(res);
             return;
         }
 
-        HttpException error = new HttpException(HttpStatus.UNAUTHORIZED, "Unauthorized: Invalid or expired session token");
+        HttpException error = new HttpException(HttpStatus.UNAUTHORIZED, "Invalid or expired session token");
         error.sendErrorResponse(res);
     }
 }

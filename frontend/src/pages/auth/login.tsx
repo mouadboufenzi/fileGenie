@@ -52,7 +52,7 @@ export default function LoginPage() {
           }
 
           if ('error' in data) {
-            console.error(data.message);
+            showNotification(data.message, false);
           }
         });
     });
