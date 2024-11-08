@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
     <MantineProvider theme={theme}>
       <Notifications />
       <Layout>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} future={{ v7_startTransition: true }} />
       </Layout>
     </MantineProvider>
   </StrictMode>,
