@@ -1,13 +1,14 @@
 package com.filegenie.backend.Filters;
 
 import com.filegenie.backend.Entities.UserSession;
-import com.filegenie.backend.DTO.ErrorResponse;
+import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.Repositories.UserSessionRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -48,12 +49,12 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         if (authHeader == null) {
-            ErrorResponse error = new ErrorResponse(HttpServletResponse.SC_FORBIDDEN, "Forbidden: Missing session token");
+            HttpException error = new HttpException(HttpStatus.FORBIDDEN, "Forbidden: Missing session token");
             error.sendErrorResponse(res);
             return;
         }
 
-        ErrorResponse error = new ErrorResponse(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid or expired session token");
+        HttpException error = new HttpException(HttpStatus.UNAUTHORIZED, "Unauthorized: Invalid or expired session token");
         error.sendErrorResponse(res);
     }
 }

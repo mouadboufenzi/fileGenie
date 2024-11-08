@@ -1,12 +1,10 @@
 package com.filegenie.backend.Controllers;
 
-import com.filegenie.backend.DTO.GenericResponse;
-import com.filegenie.backend.DTO.LoginRequest;
-import com.filegenie.backend.DTO.LoginResponse;
-import com.filegenie.backend.DTO.RegisterRequest;
+import com.filegenie.backend.DTO.*;
 import com.filegenie.backend.Services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +25,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest req) {
-        String sessionToken = userService.loginUser(req);
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest req) {
+        String sessionToken;
+
+        try {
+            sessionToken = userService.loginUser(req);
+        } catch (HttpException notFoundException) {
+            return new ResponseEntity<>(notFoundException, HttpStatus.NOT_FOUND);
+        }
+
         LoginResponse response = new LoginResponse();
         response.setToken(sessionToken);
-
         return ResponseEntity.ok(response);
     }
 

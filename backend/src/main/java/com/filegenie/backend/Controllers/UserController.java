@@ -1,5 +1,6 @@
 package com.filegenie.backend.Controllers;
 
+import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.DTO.UserResponse;
 import com.filegenie.backend.Entities.User;
 import com.filegenie.backend.Services.UserService;
@@ -18,12 +19,18 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/info")
-    public ResponseEntity<UserResponse> getUserInfo(
+    public ResponseEntity<?> getUserInfo(
         @Parameter(hidden = true) // Already given in the "Authorize" popup
         @RequestHeader("Authorization")
         String token
     ) {
-        User user = userService.getAuthedUser(token);
+        User user;
+
+        try {
+            user = userService.getAuthedUser(token);
+        } catch (HttpException notFound) {
+            return new ResponseEntity<>(notFound, notFound.getStatus());
+        }
 
         UserResponse response = new UserResponse();
         response.setUserId(user.getUserId());
