@@ -13,10 +13,10 @@ export default defineConfig({
 		},
 		environment: 'jsdom',
 		globals: true, // automatically inject jest globals (e.g. describe, it, expect)
-		setupFiles: ['./src/setup.test.ts'], // setup file to be run before tests
+		setupFiles: ['./src/testing-utils/setup.test.ts'], // setup file to be run before tests
 		exclude: [
 			'**/node_modules/**',
-			'src/setup.test.ts',
+			'src/testing-utils/**',
 		],
 	},
 })

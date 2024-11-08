@@ -11,3 +11,20 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+a {
+  color: #636ae8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
