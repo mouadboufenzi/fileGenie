@@ -16,7 +16,7 @@ export async function fetchAPI<T extends object>(url: `/api/${string}`, method: 
     .then((response) => response.json())
     .then((data: T | HttpException) => {
       if ('error' in data) {
-        showNotification(data.message, false);
+        if (data.error !== 401) showNotification(data.message, false);
         return data;
       }
 
