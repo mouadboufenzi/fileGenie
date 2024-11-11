@@ -1,5 +1,4 @@
 import { Card, Group, Image, Stack, Title } from '@mantine/core';
-import { FaCircleUser } from 'react-icons/fa6';
 import { useAuth } from '../auth-provider';
 
 interface LayoutProps {
@@ -8,7 +7,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const { isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) return children;
 
   return (
@@ -26,10 +25,10 @@ export function Layout({ children }: LayoutProps) {
             <Title order={3} lh="30px" ff="Archivo">FileGenie</Title>
           </Group>
 
-          <FaCircleUser
+          <Image
             data-testid="profile-icon"
-            size={25} 
-            color="#999" 
+            src="/user_icon.png"
+            h={25}
             className="cursor-pointer"
             onClick={() => window.location.href = '/profile'}
           />
