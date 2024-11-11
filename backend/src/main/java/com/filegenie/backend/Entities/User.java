@@ -6,23 +6,37 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
-public class User {
-
+@Table(name = "users")
+public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
-    private String Name;
-    private String role;
 
+    @Column(name="full_name", nullable = false)
+    private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserSession> sessions;
 
-
+    public enum Role {
+        ADMIN,
+        USER,
+    }
 }

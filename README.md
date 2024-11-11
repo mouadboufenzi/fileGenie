@@ -42,7 +42,7 @@
 
 ```bash
 cd backend
-docker-compose up
+docker compose up
 ```
 
 ### Backend
@@ -82,10 +82,19 @@ Language level is invalid or missing in pom.xml. Current project JDK is 17
 ---
 
 ```
+error during connect: Get "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.46/version": open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.
+```
+
+> [!TIP]
+> (Re)démarrez Docker
+
+---
+
+```
 org.hibernate.exception.JDBCConnectionException: unable to obtain isolated JDBC connection [Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.] [n/a]
 ```
 
 > [!TIP]  
-> Démarrez la bdd avant de lancer le backend.
+> Démarrez le conteneur de la bdd avant de lancer le backend (il est sensé démarré en même temps via spring boot)

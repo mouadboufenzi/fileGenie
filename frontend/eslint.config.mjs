@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import react from 'eslint-plugin-react'
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'vite.config.ts', 'vitest.config.ts'] },
   { 
     files: ['**/*.test.ts', '**/*.test.tsx'],
     rules: {
@@ -24,7 +24,7 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        project: ['./tsconfig.node.json', './tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
       }
     },
@@ -34,6 +34,10 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      'semi': ['error', 'always'],
+      'quotes': ['error', 'single'],
+      'indent': ['error', 2],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
