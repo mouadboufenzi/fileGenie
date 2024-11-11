@@ -1,9 +1,11 @@
 import { Stack, Title, Text } from '@mantine/core';
 
-export default function Error404() {
+export function Error404() {
   return (
-    <Stack 
-      maw="700" ml="auto" mr="auto"
+    <Stack
+      maw="700"
+      ml="auto"
+      mr="auto"
       h="calc(100vh - 50px - var(--mantine-spacing-md))"
       justify="center"
       align="center"

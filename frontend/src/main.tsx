@@ -6,10 +6,11 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
 
 import { theme } from './theme.ts';
-import { router } from './router.tsx';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { routeTree } from './routeTree.gen';
+import { AuthProvider } from './components/auth-provider.tsx';
 import { Layout } from './components/layout.tsx';
 
 /** 
@@ -17,14 +18,24 @@ import { Layout } from './components/layout.tsx';
  * It renders the App component into the root element. (frontend/public/index.html)
  */
 
+const router = createRouter({ routeTree });
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    touret: typeof router;
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider theme={theme}>
-      <Notifications />
-      <Layout>
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
-      </Layout>
-    </MantineProvider>
+    <AuthProvider>
+      <MantineProvider theme={theme}>
+        <Notifications />
+        <Layout>
+          <RouterProvider router={router} />
+        </Layout>
+      </MantineProvider>
+    </AuthProvider>
   </StrictMode>,
 );

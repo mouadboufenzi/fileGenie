@@ -1,30 +1,20 @@
-import { Button, Checkbox, Group, Image, Stack, TextInput, Title } from '@mantine/core';
+import { Stack, Image, Title, TextInput, Group, Checkbox, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useLocalStorage } from '@mantine/hooks';
-import { useEffect, useTransition } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { createLazyFileRoute, Link, Navigate, useNavigate } from '@tanstack/react-router';
+import { useTransition } from 'react';
 
-import type { HttpException } from '../../types/httpException';
-import { showNotification } from '../../utils/show-notification';
+import { fetchAPI } from '../utils/fetch';
+import { useAuth } from '../components/auth-provider';
+import { showNotification } from '../utils/show-notification';
 
-export default function LoginPage() {
-  const navigate = useNavigate();
+export const Route = createLazyFileRoute('/login')({
+  component: Index,
+});
+
+function Index() {
   const [isPending, startTransition] = useTransition();
-  const [token, setToken] = useLocalStorage({
-    key: 'token',
-    defaultValue: '',
-  });
-
-  useEffect(() => {
-    if (!token) return;
-
-    showNotification('Vous êtes connecté');
-    startTransition(() => {
-      setTimeout(() => {
-        navigate('/');
-      }, 200);
-    });
-  }, [token, navigate]);
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -36,29 +26,20 @@ export default function LoginPage() {
   });
 
   const handleSubmit = () => {
-    // @ts-expect-error - async function is not awaited (no issue)
-    startTransition(async () => {
-
-      // TODO: move url to .env
-      return fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form.getValues())
-      })
-        .then((response) => response.json())
-        .then((data: { token: string } | HttpException) => {
+    startTransition(() => {
+      void fetchAPI<{ token: string }>('/api/auth/login', 'POST', form.getValues())
+        .then((data) => {
           if ('token' in data) {
-            setToken(data.token);
-          }
-
-          if ('error' in data) {
-            showNotification(data.message, false);
+            login(data.token);
+            showNotification('Vous êtes connecté');
+            void navigate({ to: '/profile' });
           }
         });
     });
-
   };
 
+  if (isAuthenticated) return <Navigate to="/profile" />;
+  
   return (
     <form onSubmit={form.onSubmit(() => handleSubmit())}>
       <Stack
@@ -102,7 +83,7 @@ export default function LoginPage() {
         </Group>
 
         <Stack w="100%" gap="xs">
-          <Button 
+          <Button
             color="violet"
             fullWidth
             type="submit"
@@ -110,7 +91,10 @@ export default function LoginPage() {
           >
             Se connecter
           </Button>
-          <Button color="violet" fullWidth variant="light" onClick={() => navigate('/register')}>Créer un compte</Button>
+
+          <Link to="/register">
+            <Button color="violet" fullWidth variant="light">Créer un compte</Button>
+          </Link>
         </Stack>
       </Stack>
     </form>

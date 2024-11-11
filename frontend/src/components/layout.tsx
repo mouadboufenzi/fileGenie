@@ -1,14 +1,15 @@
 import { Card, Group, Image, Stack, Title } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
 import { FaCircleUser } from 'react-icons/fa6';
+import { useAuth } from './auth-provider';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [token] = useLocalStorage({ key: 'token', defaultValue: '' });
-  if (!token) return children;
+  const { isAuthenticated } = useAuth();
+  
+  if (!isAuthenticated) return children;
 
   return (
     <Stack gap="md">
