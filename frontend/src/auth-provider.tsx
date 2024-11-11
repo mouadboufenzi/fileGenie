@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { fetchAPI } from '../utils/fetch';
-import { GenericMessage } from '../types/genericMessage';
+import { fetchAPI } from './utils/fetch';
+import { GenericMessage } from './types/genericMessage';
 import { useSessionStorage } from '@mantine/hooks';
 
 const AuthContext = createContext({

@@ -4,7 +4,7 @@ import { createLazyFileRoute, Link, Navigate, useNavigate } from '@tanstack/reac
 import { useTransition } from 'react';
 
 import { fetchAPI } from '../utils/fetch';
-import { useAuth } from '../components/auth-provider';
+import { useAuth } from '../auth-provider';
 import { showNotification } from '../utils/show-notification';
 
 export const Route = createLazyFileRoute('/login')({

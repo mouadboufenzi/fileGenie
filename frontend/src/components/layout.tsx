@@ -1,6 +1,6 @@
 import { Card, Group, Image, Stack, Title } from '@mantine/core';
 import { FaCircleUser } from 'react-icons/fa6';
-import { useAuth } from './auth-provider';
+import { useAuth } from '../auth-provider';
 
 interface LayoutProps {
   children: React.ReactNode;

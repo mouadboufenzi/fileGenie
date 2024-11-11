@@ -1,12 +1,12 @@
 import { Title, Text, Image, Group, Stack, Button, ActionIcon, Table, TextInput } from '@mantine/core';
 import { createLazyFileRoute, Navigate } from '@tanstack/react-router';
-import { useAuth } from '../components/auth-provider';
 
 import { useEffect, useState, useTransition } from 'react';
 import { IoMdArrowBack } from 'react-icons/io';
 import { MdLogout } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 
+import { useAuth } from '../auth-provider';
 import { fetchAPI } from '../utils/fetch';
 import { UserInfo } from '../types/userInfo';
 import { LuClock3 } from 'react-icons/lu';

@@ -10,7 +10,7 @@ import { createRoot } from 'react-dom/client';
 import { theme } from './theme.ts';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
-import { AuthProvider } from './components/auth-provider.tsx';
+import { AuthProvider } from './auth-provider.tsx';
 import { Layout } from './components/layout.tsx';
 
 /** 
