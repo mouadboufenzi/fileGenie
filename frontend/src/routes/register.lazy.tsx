@@ -18,7 +18,7 @@ function Register() {
     mode: 'uncontrolled',
     initialValues: { name: '', email: '', password: '' },
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Votre nom est requis'),
+      name: (value) => (value.length > 3 ? null : 'Votre nom est requis'),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Email invalide'),
       password: (value) => (value.length >= 8 ? null : 'Le mot de passe doit contenir au moins 8 caractères'),
     },

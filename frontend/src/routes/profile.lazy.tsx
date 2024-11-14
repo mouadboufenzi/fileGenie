@@ -21,6 +21,19 @@ function RouteComponent() {
   const { logout, isAuthenticated } = useAuth();
   const [user, setUser] = useState<UserInfo | null>(null);
 
+  const [isEditing, setEditing] = useState(false);
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      email: '',
+      name: '',
+    },
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Email invalide'),
+      name: (value) => (value.length >= 3 ? null : 'Le nom doit contenir au moins 3 caractères'),
+    },
+  });
 
   useEffect(() => {
     void fetchAPI<UserInfo>('/api/user/info', 'GET')
@@ -39,6 +52,19 @@ function RouteComponent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSubmit = () => {
+    startTransition(() => {
+      void fetchAPI<UserInfo>('/api/user/info', 'PUT', form.getValues())
+        .then((data) => {
+          if ('userId' in data) {
+            setUser(data);
+          }
+        });
+    });
+
+    setEditing(false);
+  };
+
   if (!isAuthenticated) return <Navigate to="/login" />;
   
   return (
@@ -49,6 +75,35 @@ function RouteComponent() {
         </ActionIcon>
         <Title ff="Archivo">Profil Utilisateur</Title>
       </Group>
+     
+      {isEditing && (
+        <form onSubmit={form.onSubmit(() => handleSubmit())}>
+          <Stack w="100%" align="center" ml="auto" mr="auto" maw="400px" >
+            <CiEdit size="60" />
+            <Title order={3} c="violet" ff="Archivo">Éditez vos informations</Title>
+            <Stack w="100%">
+              <TextInput 
+                label="Nom"
+                withAsterisk
+                key={form.key('name')}
+                {...form.getInputProps('name')}
+              />
+              <TextInput 
+                label="Email"
+                withAsterisk
+                key={form.key('email')}
+                {...form.getInputProps('email')}
+              />
+              <Button color="violet" type="submit" mt="md" loading={isPending}>
+                Enregistrer
+              </Button>
+            </Stack>
+          </Stack>
+        </form>
+      )}
+
+      {!isEditing && (
+        <>
           <Group justify="space-between">
             <Group wrap="nowrap" align="start">
               <Image src="/user_icon.png" h={90} />
@@ -97,6 +152,8 @@ function RouteComponent() {
             )}
 
           </Stack>
+        </>
+      )}
 
     </Stack>
   );

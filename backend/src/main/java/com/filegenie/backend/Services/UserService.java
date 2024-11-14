@@ -24,7 +24,7 @@ public class UserService {
     @Autowired
     private UserSessionRepository userSessionRepository;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public void registerUser(RegisterRequest req) throws HttpException {
         User user = new User();
@@ -76,5 +76,15 @@ public class UserService {
         }
 
         return sessionOpt.get().getUser();
+    }
+
+    public void updateUser(Long userId, RegisterRequest req) throws HttpException {
+        userRepository.findById(userId)
+            .map(user -> {
+                user.setName(req.getName());
+                user.setEmail(req.getEmail());
+                return userRepository.save(user);
+            })
+            .orElseThrow(() -> new HttpException(HttpStatus.CONFLICT, "Email déjà utilisé"));
     }
 }
