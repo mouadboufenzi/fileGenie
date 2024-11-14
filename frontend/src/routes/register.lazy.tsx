@@ -1,10 +1,11 @@
 import { Stack, Image, Title, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute, Link, Navigate, useNavigate } from '@tanstack/react-router';
 import { useTransition } from 'react';
 import { fetchAPI } from '../utils/fetch';
 import { showNotification } from '../utils/show-notification';
 import { GenericMessage } from '../types/genericMessage';
+import { useAuth } from '../auth-provider';
 
 export const Route = createLazyFileRoute('/register')({
   component: Register,
@@ -13,6 +14,7 @@ export const Route = createLazyFileRoute('/register')({
 function Register() {
   const [isPending, startTransition] = useTransition();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -35,6 +37,8 @@ function Register() {
         });
     });
   };
+
+  if (isAuthenticated) return <Navigate to="/profile" />;
   
   return (
     <form onSubmit={form.onSubmit(() => handleSubmit())}>
