@@ -30,7 +30,10 @@ function Register() {
     startTransition(() => {
       void fetchAPI<GenericMessage>('/api/auth/register', 'POST', form.getValues())
         .then((data) => {
-          if ('message' in data) {
+          if ('error' in data) {
+            showNotification(data.message, false);
+          }
+          else if ('message' in data) {
             showNotification(data.message);
             void navigate({ to: '/login' });
           }

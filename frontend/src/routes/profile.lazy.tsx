@@ -11,6 +11,8 @@ import { fetchAPI } from '../utils/fetch';
 import { UserInfo } from '../types/userInfo';
 import { LuClock3 } from 'react-icons/lu';
 import { useForm } from '@mantine/form';
+import { showNotification } from '../utils/show-notification';
+import { GenericMessage } from '../types/genericMessage';
 
 export const Route = createLazyFileRoute('/profile')({
   component: RouteComponent,
@@ -35,7 +37,7 @@ function RouteComponent() {
     },
   });
 
-  useEffect(() => {
+  const getUserData = () => {
     void fetchAPI<UserInfo>('/api/user/info', 'GET')
       .then((data) => {
         if ('userId' in data) {
@@ -48,21 +50,23 @@ function RouteComponent() {
           });
         }
       });
-  // => infinite loop if "form" is added to the dependencies
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
+
+  useEffect(() => {
+    getUserData();
   }, []);
 
   const handleSubmit = () => {
     startTransition(() => {
-      void fetchAPI<UserInfo>('/api/user/info', 'PUT', form.getValues())
+      void fetchAPI<GenericMessage>('/api/user/info', 'PUT', form.getValues())
         .then((data) => {
-          if ('userId' in data) {
-            setUser(data);
+          if (!('error' in data)) {
+            showNotification(data.message);
+            getUserData();
+            setEditing(false);
           }
         });
     });
-
-    setEditing(false);
   };
 
   if (!isAuthenticated) return <Navigate to="/login" />;
@@ -97,6 +101,7 @@ function RouteComponent() {
               <Button color="violet" type="submit" mt="md" loading={isPending}>
                 Enregistrer
               </Button>
+              <Button color="violet" variant="light" onClick={() => setEditing(false)}>Annuler</Button>
             </Stack>
           </Stack>
         </form>

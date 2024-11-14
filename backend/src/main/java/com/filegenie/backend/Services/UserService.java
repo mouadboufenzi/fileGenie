@@ -79,12 +79,16 @@ public class UserService {
     }
 
     public void updateUser(Long userId, RegisterRequest req) throws HttpException {
+        if (userRepository.existsByEmailAndUserIdNot(req.getEmail(), userId)) {
+            throw new HttpException(HttpStatus.CONFLICT, "Email déjà utilisé");
+        }
+
         userRepository.findById(userId)
             .map(user -> {
                 user.setName(req.getName());
                 user.setEmail(req.getEmail());
                 return userRepository.save(user);
             })
-            .orElseThrow(() -> new HttpException(HttpStatus.CONFLICT, "Email déjà utilisé"));
+            .orElseThrow(() -> new HttpException(HttpStatus.NOT_FOUND, "User not found"));
     }
 }

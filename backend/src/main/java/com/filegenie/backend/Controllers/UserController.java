@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/infos")
+    @PutMapping("/info")
     public ResponseEntity<?> updateUserInfo(
         @RequestBody RegisterRequest req,
         @Parameter(hidden = true) // Already given in the "Authorize" popup
@@ -58,8 +58,8 @@ public class UserController {
             response.setMessage("Utilisateur mis à jour");
 
             return ResponseEntity.ok(response);
-        } catch (HttpException conflict) {
-            return new ResponseEntity<>(conflict, conflict.getStatus());
+        } catch (HttpException conflictOrNotFound) {
+            return new ResponseEntity<>(conflictOrNotFound, conflictOrNotFound.getStatus());
         }
     }
 }
