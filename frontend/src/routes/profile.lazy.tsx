@@ -54,6 +54,7 @@ function RouteComponent() {
 
   useEffect(() => {
     getUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = () => {
