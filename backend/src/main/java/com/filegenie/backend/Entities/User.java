@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -34,6 +35,14 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserSession> sessions;
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_configuration_file",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "configuration_file_id")
+    )
+    private Set<ConfigurationFile> configurationFiles;
 
     public enum Role {
         ADMIN,

@@ -20,7 +20,7 @@ public class Field {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long fieldId;
 
     @Column(nullable = false)
     private String name;
@@ -40,10 +40,14 @@ public class Field {
     @OneToMany(mappedBy = "parentField", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Field> subFields;
 
-    public enum FieldType {
-        VALUE, OBJECT, LIST
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ConfigurationFile configurationFile;
 
+    public enum FieldType {
+        VALUE,
+        OBJECT,
+        LIST,
+    }
 }
 
 

@@ -23,7 +23,7 @@ public class FieldController {
         f.setName(name);
         f.setValue(value);
 
-        return f.getId();
+        return f.getFieldId();
     }
 
     @GetMapping(path="/all")
