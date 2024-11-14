@@ -1,6 +1,8 @@
 package com.filegenie.backend.Controllers;
 
+import com.filegenie.backend.DTO.GenericResponse;
 import com.filegenie.backend.DTO.HttpException;
+import com.filegenie.backend.DTO.RegisterRequest;
 import com.filegenie.backend.DTO.UserResponse;
 import com.filegenie.backend.Entities.User;
 import com.filegenie.backend.Services.UserService;
@@ -39,5 +41,25 @@ public class UserController {
         response.setRole(user.getRole());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/info")
+    public ResponseEntity<?> updateUserInfo(
+        @RequestBody RegisterRequest req,
+        @Parameter(hidden = true) // Already given in the "Authorize" popup
+        @RequestHeader("Authorization")
+        String token
+    ) {
+        try {
+            User user = userService.getAuthedUser(token);
+            userService.updateUser(user.getUserId(), req);
+
+            GenericResponse response = new GenericResponse();
+            response.setMessage("Utilisateur mis à jour");
+
+            return ResponseEntity.ok(response);
+        } catch (HttpException conflictOrNotFound) {
+            return new ResponseEntity<>(conflictOrNotFound, conflictOrNotFound.getStatus());
+        }
     }
 }

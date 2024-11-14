@@ -1,10 +1,10 @@
 package com.filegenie.backend.Controllers;
 
 import com.filegenie.backend.DTO.*;
+import com.filegenie.backend.Services.UserSessionService;
 import com.filegenie.backend.Services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserSessionService userSessionService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest req) {
@@ -42,4 +45,22 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/verify/{token}")
+    public ResponseEntity<?> sessionHasExpired(
+        @PathVariable("token")
+        String token
+    ) {
+        try {
+            boolean valid = userSessionService.verifyToken(token);
+
+            GenericResponse res = new GenericResponse();
+            res.setMessage(valid ? "Token OK" : "Token KO");
+
+            return ResponseEntity.ok(res);
+
+        } catch (HttpException notFound) {
+            return new ResponseEntity<>(notFound, notFound.getStatus());
+        }
+
+    }
 }

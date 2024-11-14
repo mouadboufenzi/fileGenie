@@ -1,14 +1,14 @@
 import { Card, Group, Image, Stack, Title } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
-import { FaCircleUser } from 'react-icons/fa6';
+import { useAuth } from '../auth-provider';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [token] = useLocalStorage({ key: 'token', defaultValue: '' });
-  if (!token) return children;
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) return children;
 
   return (
     <Stack gap="md">
@@ -25,10 +25,10 @@ export function Layout({ children }: LayoutProps) {
             <Title order={3} lh="30px" ff="Archivo">FileGenie</Title>
           </Group>
 
-          <FaCircleUser
+          <Image
             data-testid="profile-icon"
-            size={25} 
-            color="#999" 
+            src="/user_icon.png"
+            h={25}
             className="cursor-pointer"
             onClick={() => window.location.href = '/profile'}
           />

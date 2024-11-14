@@ -1,49 +1,48 @@
-import { Button, Image, Stack, TextInput, Title } from '@mantine/core';
+import { Stack, Image, Title, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { createLazyFileRoute, Link, Navigate, useNavigate } from '@tanstack/react-router';
 import { useTransition } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { fetchAPI } from '../utils/fetch';
+import { showNotification } from '../utils/show-notification';
+import { GenericMessage } from '../types/genericMessage';
+import { useAuth } from '../auth-provider';
 
-import { showNotification } from '../../utils/show-notification';
-import type { HttpException } from '../../types/httpException';
-import { GenericMessage } from '../../types/genericMessage';
+export const Route = createLazyFileRoute('/register')({
+  component: Register,
+});
 
-export default function RegisterPage() {
-  const navigate = useNavigate();
+function Register() {
   const [isPending, startTransition] = useTransition();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: { name: '', email: '', password: '' },
     validate: {
-      name: (value) => (value.length > 0 ? null : 'Votre nom est requis'),
+      name: (value) => (value.length > 3 ? null : 'Votre nom est requis'),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Email invalide'),
       password: (value) => (value.length >= 8 ? null : 'Le mot de passe doit contenir au moins 8 caractères'),
     },
   });
 
   const handleSubmit = () => {
-    // @ts-expect-error - async function is not awaited (no issue)
-    startTransition(async () => {
-      // TODO: move url to .env
-      return fetch('http://localhost:8080/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form.getValues())
-      })
-        .then((response) => response.json())
-        .then((data: GenericMessage | HttpException) => {
+    startTransition(() => {
+      void fetchAPI<GenericMessage>('/api/auth/register', 'POST', form.getValues())
+        .then((data) => {
           if ('error' in data) {
             showNotification(data.message, false);
           }
-
-          if ('message' in data && !('error' in data)) {
-            navigate('/login');
-            showNotification('Inscription réussi, connectez-vous!');
+          else if ('message' in data) {
+            showNotification(data.message);
+            void navigate({ to: '/login' });
           }
         });
     });
   };
 
+  if (isAuthenticated) return <Navigate to="/profile" />;
+  
   return (
     <form onSubmit={form.onSubmit(() => handleSubmit())}>
       <Stack
@@ -64,7 +63,7 @@ export default function RegisterPage() {
             key={form.key('name')}
             {...form.getInputProps('name')}
           />
-          
+
           <TextInput
             label="Email"
             placeholder="exemple@email.fr"
@@ -93,7 +92,10 @@ export default function RegisterPage() {
           >
             S'inscrire
           </Button>
-          <Button color="violet" fullWidth variant="light" onClick={() => navigate('/login')}>Vous avez déjà un compte?</Button>
+
+          <Link to="/login">
+            <Button color="violet" fullWidth variant="light">Vous avez déjà un compte?</Button>
+          </Link>
         </Stack>
       </Stack>
     </form>
