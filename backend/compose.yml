@@ -1,11 +1,31 @@
 services:
+  adminer:
+    container_name: 'da50-filegenie-adminer'
+    image: 'adminer:latest'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - appli
+
   mysql:
     container_name: 'da50-filegenie-mysql'
     image: 'mysql:latest'
     environment:
       - 'MYSQL_DATABASE=filegenie'
-      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_PASSWORD=root'
       - 'MYSQL_ROOT_PASSWORD=root'
-      - 'MYSQL_USER=admin'
+      - 'MYSQL_USER=root'
     ports:
-      - '3306:3306'
+      - '0:3306'
+    networks:
+      - appli
+
+networks:
+  appli:
+    driver: bridge
+
+
+
+

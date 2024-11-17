@@ -1,14 +1,7 @@
 package com.filegenie.backend.Entities;
-
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.List;
-import lombok.Builder;
-
 
 @Entity
 @Table(name = "Field")
@@ -16,6 +9,8 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
+@Getter
 public class Field {
 
     @Id
@@ -25,10 +20,9 @@ public class Field {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-
-    @Column(nullable = false)
-    private FieldType type;
+//    @Enumerated(EnumType.STRING)
+    @Column
+    private String type;
 
     @Column(columnDefinition = "TEXT")
     private String value;
@@ -48,6 +42,8 @@ public class Field {
         OBJECT,
         LIST,
     }
+
+
 }
 
 
