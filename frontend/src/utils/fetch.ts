@@ -5,7 +5,7 @@ export async function fetchAPI<T extends object>(url: `/api/${string}`, method: 
   const authToken = JSON.parse(sessionStorage.getItem('filegenie-token') ?? '{ "token": "" }') as { token: string };
 
   // TODO: move url to .env
-  return fetch(`http://localhost:8080${url}`, {
+  return fetch(`http://localhost:8081${url}`, {
     method,
     headers: { 
       'Content-Type': 'application/json',
