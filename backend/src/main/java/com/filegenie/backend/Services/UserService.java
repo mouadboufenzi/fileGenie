@@ -59,7 +59,6 @@ public class UserService {
             session.setExpiresAt(LocalDateTime.now().plusHours(2));
 
             userSessionRepository.save(session);
-            System.out.println("Voici le token de l'utilisateur : "+ session.getSessionToken());
             return session.getSessionToken();
         }
 
