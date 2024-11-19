@@ -17,15 +17,16 @@ public class Field {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fieldId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-//    @Enumerated(EnumType.STRING)
-    @Column
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FieldType type;
 
-    @Column(columnDefinition = "TEXT")
-    private String value;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "field_id")
+    private List<FieldValue> fieldValues;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_field_id")
@@ -42,8 +43,7 @@ public class Field {
         OBJECT,
         LIST,
     }
-
-
 }
+
 
 

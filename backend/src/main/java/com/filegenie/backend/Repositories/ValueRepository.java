@@ -1,6 +1,6 @@
 package com.filegenie.backend.Repositories;
 
-import com.filegenie.backend.Entities.Value;
+import com.filegenie.backend.Entities.FieldValue;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ValueRepository extends CrudRepository<Value, Integer> {}
+public interface ValueRepository extends CrudRepository<FieldValue, Integer> {}
