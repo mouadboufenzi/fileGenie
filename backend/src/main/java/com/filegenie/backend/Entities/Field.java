@@ -1,14 +1,7 @@
 package com.filegenie.backend.Entities;
-
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.List;
-import lombok.Builder;
-
 
 @Entity
 @Table(name = "Field")
@@ -16,22 +9,24 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
+@Getter
 public class Field {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fieldId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
-
     @Column(nullable = false)
     private FieldType type;
 
-    @Column(columnDefinition = "TEXT")
-    private String value;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "field_id")
+    private List<FieldValue> fieldValues;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_field_id")
@@ -49,5 +44,6 @@ public class Field {
         LIST,
     }
 }
+
 
 

@@ -10,14 +10,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "valeurs")
-public class Value {
+@Table(name = "FieldValues")
+public class FieldValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String type;
+    private Long id;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "field_id", nullable = false)
+    private Field field;
 
 
 
