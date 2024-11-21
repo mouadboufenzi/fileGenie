@@ -1,0 +1,11 @@
+services:
+  mysql:
+    container_name: 'da50-filegenie-mysql'
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=filegenie'
+      - 'MYSQL_PASSWORD=secret'
+      - 'MYSQL_ROOT_PASSWORD=root'
+      - 'MYSQL_USER=admin'
+    ports:
+      - '3306:3306'
