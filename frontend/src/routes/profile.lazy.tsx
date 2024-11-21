@@ -129,6 +129,8 @@ function RouteComponent() {
             <Button color="red" rightSection={<MdLogout />} onClick={logout}>Déconnexion</Button>
           </Group>
 
+          <Button onClick={() => window.location.href = '/typefile'}>Générer un fichier</Button>
+        
           <Stack>
             <Group gap="5">
               <LuClock3 color="rgb(121, 80, 242)" size="20" />

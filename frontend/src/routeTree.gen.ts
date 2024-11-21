@@ -16,12 +16,20 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const TypefileLazyImport = createFileRoute('/typefile')()
 const RegisterLazyImport = createFileRoute('/register')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const LoginLazyImport = createFileRoute('/login')()
+const CreatefileLazyImport = createFileRoute('/createfile')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const TypefileLazyRoute = TypefileLazyImport.update({
+  id: '/typefile',
+  path: '/typefile',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/typefile.lazy').then((d) => d.Route))
 
 const RegisterLazyRoute = RegisterLazyImport.update({
   id: '/register',
@@ -41,6 +49,12 @@ const LoginLazyRoute = LoginLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
+const CreatefileLazyRoute = CreatefileLazyImport.update({
+  id: '/createfile',
+  path: '/createfile',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/createfile.lazy').then((d) => d.Route))
+
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
@@ -56,6 +70,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/createfile': {
+      id: '/createfile'
+      path: '/createfile'
+      fullPath: '/createfile'
+      preLoaderRoute: typeof CreatefileLazyImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -79,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyImport
       parentRoute: typeof rootRoute
     }
+    '/typefile': {
+      id: '/typefile'
+      path: '/typefile'
+      fullPath: '/typefile'
+      preLoaderRoute: typeof TypefileLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -86,47 +114,70 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/createfile': typeof CreatefileLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/typefile': typeof TypefileLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/createfile': typeof CreatefileLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/typefile': typeof TypefileLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/createfile': typeof CreatefileLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/typefile': typeof TypefileLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/profile' | '/register'
+  fullPaths:
+    | '/'
+    | '/createfile'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/typefile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/profile' | '/register'
-  id: '__root__' | '/' | '/login' | '/profile' | '/register'
+  to: '/' | '/createfile' | '/login' | '/profile' | '/register' | '/typefile'
+  id:
+    | '__root__'
+    | '/'
+    | '/createfile'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/typefile'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  CreatefileLazyRoute: typeof CreatefileLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
+  TypefileLazyRoute: typeof TypefileLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  CreatefileLazyRoute: CreatefileLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
+  TypefileLazyRoute: TypefileLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -140,13 +191,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/createfile",
         "/login",
         "/profile",
-        "/register"
+        "/register",
+        "/typefile"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/createfile": {
+      "filePath": "createfile.lazy.tsx"
     },
     "/login": {
       "filePath": "login.lazy.tsx"
@@ -156,6 +212,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.lazy.tsx"
+    },
+    "/typefile": {
+      "filePath": "typefile.lazy.tsx"
     }
   }
 }
