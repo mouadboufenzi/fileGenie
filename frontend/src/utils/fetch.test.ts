@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fetchAPI } from './fetch';
 import { showNotification } from './show-notification';
+import { API_URL } from '../config';
 
 vi.mock('./show-notification', () => ({
   showNotification: vi.fn(),
@@ -28,7 +29,7 @@ describe('fetchAPI', () => {
   
       const response = await fetchAPI('/api/test', 'GET');
   
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:8080/api/test', {
+      expect(mockFetch).toHaveBeenCalledWith(`${API_URL}/api/test`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ describe('fetchAPI', () => {
   
       const response = await fetchAPI('/api/test', 'POST', { key: 'value' });
   
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:8080/api/test', {
+      expect(mockFetch).toHaveBeenCalledWith(`${API_URL}/api/test`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +99,7 @@ describe('fetchAPI', () => {
 
       await fetchAPI('/api/test', 'GET');
   
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:8080/api/test', {
+      expect(mockFetch).toHaveBeenCalledWith(`${API_URL}/api/test`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
