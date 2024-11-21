@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import react from 'eslint-plugin-react'
 
 export default tseslint.config(
-  { ignores: ['dist', 'vite.config.ts', 'vitest.config.ts'] },
+  { ignores: ['dist', 'coverage', 'vite.config.ts', 'vitest.config.ts'] },
   { 
     files: ['**/*.test.ts', '**/*.test.tsx'],
     rules: {
