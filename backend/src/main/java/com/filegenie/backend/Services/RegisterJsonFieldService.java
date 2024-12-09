@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegisterFieldService {
+public class RegisterJsonFieldService {
 
     @Autowired
     private FieldRepository fieldRepository;
@@ -19,7 +19,8 @@ public class RegisterFieldService {
     @Autowired
     private FieldValueRepository fieldValueRepository;
 
-    public void saveFields(List<Field> fields) {
+    public void saveJsonFields(List<Field> fields) {
+        
 
             for (Field field : fields) {
 
