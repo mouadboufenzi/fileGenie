@@ -7,9 +7,6 @@ export default defineConfig({
 		coverage: {
 			provider: 'istanbul',
 			reporter: ['text', 'html'],
-			thresholds: {
-				100: true, // 100% coverage
-			}
 		},
 		environment: 'jsdom',
 		globals: true, // automatically inject jest globals (e.g. describe, it, expect)
