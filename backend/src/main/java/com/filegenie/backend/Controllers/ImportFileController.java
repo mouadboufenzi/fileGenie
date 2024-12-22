@@ -2,10 +2,7 @@ package com.filegenie.backend.Controllers;
 
 import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.Entities.Field;
-import com.filegenie.backend.Services.JsonParserService;
-import com.filegenie.backend.Services.RegisterJsonFieldService;
-import com.filegenie.backend.Services.RegisterXmlFieldService;
-import com.filegenie.backend.Services.XmlParserService;
+import com.filegenie.backend.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +30,12 @@ public class ImportFileController {
     @Autowired
     private RegisterXmlFieldService registerXmlFieldService;
 
+    @Autowired
+    private YamlParserService yamlParserService;
+
+    @Autowired
+    private RegisterYamlFieldService registerYamlFieldService;
+
     @PostMapping(path = "/")
     public ResponseEntity<?> addNewField(
             @RequestParam("file") MultipartFile file,
@@ -54,6 +57,11 @@ public class ImportFileController {
                 }
                 case "xml": {
                     handleXmlFile(file);
+                    break;
+                }
+                case "yaml":
+                case "yml": {
+                    handleYamlFile(file);
                     break;
                 }
                 default: {
@@ -100,4 +108,20 @@ public class ImportFileController {
             }
         }
     }
+
+    // Méthode utilitaire pour gérer les fichiers YAML
+    private void handleYamlFile(MultipartFile file) throws Exception {
+        File tempFile = File.createTempFile("uploaded-", ".yaml");
+        try {
+            file.transferTo(tempFile);
+            List<Field> fields = yamlParserService.parseYamlToFields(tempFile);
+            System.out.println(fields);
+            registerYamlFieldService.saveYamlFields(fields);
+        } finally {
+            if (!tempFile.delete()) {
+                System.err.println("Le fichier temporaire YAML n'a pas pu être supprimé : " + tempFile.getAbsolutePath());
+            }
+        }
+    }
+
 }
