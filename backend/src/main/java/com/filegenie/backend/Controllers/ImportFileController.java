@@ -36,6 +36,12 @@ public class ImportFileController {
     @Autowired
     private RegisterYamlFieldService registerYamlFieldService;
 
+    @Autowired
+    private CsvParserService csvParserService;
+
+    @Autowired
+    private RegisterCsvFieldService registerCsvFieldService;
+
     @PostMapping(path = "/")
     public ResponseEntity<?> addNewField(
             @RequestParam("file") MultipartFile file,
@@ -62,6 +68,10 @@ public class ImportFileController {
                 case "yaml":
                 case "yml": {
                     handleYamlFile(file);
+                    break;
+                }
+                case "csv": {
+                    handleCsvFile(file);
                     break;
                 }
                 default: {
@@ -120,6 +130,21 @@ public class ImportFileController {
         } finally {
             if (!tempFile.delete()) {
                 System.err.println("Le fichier temporaire YAML n'a pas pu être supprimé : " + tempFile.getAbsolutePath());
+            }
+        }
+    }
+
+    // Méthode utilitaire pour gérer les fichiers CSV
+    private void handleCsvFile(MultipartFile file) throws Exception {
+        File tempFile = File.createTempFile("uploaded-", ".csv");
+        try {
+            file.transferTo(tempFile);
+            List<Field> fields = csvParserService.parseCsvToFields(tempFile);
+            System.out.println(fields);
+            registerCsvFieldService.saveCsvFields(fields);
+        } finally {
+            if (!tempFile.delete()) {
+                System.err.println("Le fichier temporaire CSV n'a pas pu être supprimé : " + tempFile.getAbsolutePath());
             }
         }
     }
