@@ -11,5 +11,9 @@ public interface FieldRepository extends JpaRepository<Field, Long> {
 
     Optional<Field> findByName(String name);
 
+    List<Field> findByParentFieldIsNull();
+
+    List<Field> findByParentField_FieldId(Long fieldId);
+
 
 }
