@@ -1,10 +1,11 @@
 package com.filegenie.backend.Controllers;
 
-import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.Entities.Field;
 import com.filegenie.backend.Services.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.List;
 
-@Controller
+@Tag(name = "Import Files")
 @RestController
 @RequestMapping("/api/file/import")
 public class ImportFileController {
@@ -43,6 +44,10 @@ public class ImportFileController {
     private RegisterCsvFieldService registerCsvFieldService;
 
     @PostMapping(path = "/")
+    @RequestMapping(
+            path = "/upload",
+            method = RequestMethod.POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addNewField(
             @RequestParam("file") MultipartFile file,
             @RequestHeader("Authorization") String token) {
