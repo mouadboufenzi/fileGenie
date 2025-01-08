@@ -58,7 +58,10 @@ function CreateFile() {
           const nextVersion = latestVersion.split('.').map(Number).map((v, i) => (i === 1 ? v + 1 : v)).join('.');
 
           setCurrentVersion(nextVersion);
-          setConfig({ ...tmpConfig, [nextVersion]: [] });
+          setConfig({ 
+            ...tmpConfig, 
+            [nextVersion]: tmpConfig[latestVersion] // copy latest version to next version instead of starting from scratch
+          });
           form.setFieldValue('configurationName', data.configName);
         }
       });
