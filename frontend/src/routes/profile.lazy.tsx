@@ -1,4 +1,4 @@
-import { Title, Text, Image, Group, Stack, Button, ActionIcon, Table, TextInput } from '@mantine/core';
+import { Title, Text, Image, Group, Stack, Button, ActionIcon, Table, TextInput, Card } from '@mantine/core';
 import { createLazyFileRoute, Navigate } from '@tanstack/react-router';
 
 import { useEffect, useState, useTransition } from 'react';
@@ -73,13 +73,8 @@ function RouteComponent() {
   if (!isAuthenticated) return <Navigate to="/login" />;
   
   return (
-    <Stack maw="1080" w="100%" ml="auto" mr="auto" gap="80">
-      <Group ml="calc(-50px - var(--mantine-spacing-md))">
-        <ActionIcon size="50" bg="transparent" c="black">
-          <IoMdArrowBack size="45" />
-        </ActionIcon>
-        <Title ff="Archivo">Profil Utilisateur</Title>
-      </Group>
+    <Stack maw="1080" w="100%" ml="auto" mr="auto" gap="40">
+      <Title ff="Archivo">Profil</Title>
      
       {isEditing && (
         <form onSubmit={form.onSubmit(() => handleSubmit())}>
@@ -109,32 +104,43 @@ function RouteComponent() {
       )}
 
       {!isEditing && (
-        <>
-          <Group justify="space-between">
-            <Group wrap="nowrap" align="start">
-              <Image src="/user_icon.png" h={90} />
+        <Stack gap="40" align="center">
+          <Card withBorder radius="md" w="100%" shadow="sm">
+            <Group wrap="nowrap" justify="space-between" align="start">
+              <Group wrap="nowrap" align="center">
+                <Image src="/user_icon.png" h={90} />
 
-              <Stack gap={0} h="100%">
-                <Group gap={0}>
-                  <Text ff="Archivo" size="xl" fw="600" c="#555">{user?.name}</Text>
-                  <ActionIcon size="input-sm" bg="transparent" c="black" onClick={() => setEditing(true)}>
-                    <CiEdit size="20" />
-                  </ActionIcon>
-                </Group>
-                <Text ff="Inter" size="md" c="#555">{user?.email}</Text>
-              </Stack>
+                <Stack gap="0" h="100%">
+                  <Group gap={0}>
+                    <Text ff="Archivo" size="xl" fw="600" c="#555">{user?.name}</Text>
+                    <ActionIcon size="input-sm" bg="transparent" c="black" onClick={() => setEditing(true)}>
+                      <CiEdit size="20" />
+                    </ActionIcon>
+                  </Group>
+                  <Text ff="Inter" size="md" c="#555">{user?.email}</Text>
+                  
+                </Stack>
+              </Group>
 
+              <Button
+                color="red"
+                variant="outline"
+                rightSection={<MdLogout />}
+                justify="space-between"
+                onClick={logout}
+              >
+                Déconnexion
+              </Button>
             </Group>
-
-            <Button color="red" rightSection={<MdLogout />} onClick={logout}>Déconnexion</Button>
-          </Group>
-
-          <Button onClick={() => window.location.href = '/typefile'}>Générer un fichier</Button>
+          </Card>
         
-          <Stack>
-            <Group gap="5">
-              <LuClock3 color="rgb(121, 80, 242)" size="20" />
-              <Title order={3} c="violet" ff="Archivo">Historique de générations</Title>
+          <Stack w="100%">
+            <Group justify="space-between" w="100%">
+              <Group gap="5">
+                <LuClock3 color="rgb(121, 80, 242)" size="20" />
+                <Title order={3} c="violet" ff="Archivo">Historique de générations</Title>
+              </Group>
+              <Button color="violet" w="200" onClick={() => window.location.href = '/typefile'}>Nouvelle configuration</Button>
             </Group>
 
             {user?.files.length === 0 && (
@@ -160,7 +166,7 @@ function RouteComponent() {
             )}
 
           </Stack>
-        </>
+        </Stack>
       )}
 
     </Stack>
