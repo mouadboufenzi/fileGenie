@@ -1,5 +1,6 @@
 package com.filegenie.backend.Controllers;
 
+import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.Entities.Field;
 import com.filegenie.backend.Services.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,28 +63,22 @@ public class ImportFileController {
             String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 
             switch (extension) {
-                case "json": {
+                case "json" -> {
                     handleJsonFile(file);
-                    break;
                 }
-                case "xml": {
+                case "xml" -> {
                     handleXmlFile(file);
-                    break;
                 }
-                case "yaml":
-                case "yml": {
+                case "yaml", "yml" -> {
                     handleYamlFile(file);
-                    break;
                 }
-                case "csv": {
+                case "csv" -> {
                     handleCsvFile(file);
-                    break;
                 }
-                default: {
+                default -> {
                     throw new UnsupportedOperationException("Extension non prise en charge : " + extension);
                 }
             }
-
         } catch (Exception e) {
             String customMessage = "Erreur lors de l'enregistrement des champs : " + e.getMessage();
             System.err.println(customMessage);
@@ -100,7 +95,6 @@ public class ImportFileController {
         try {
             file.transferTo(tempFile);
             List<Field> fields = jsonParserService.parseJsonToFields(tempFile);
-            System.out.println(fields);
             registerJsonFieldService.saveJsonFields(fields);
         } finally {
             if (!tempFile.delete()) {

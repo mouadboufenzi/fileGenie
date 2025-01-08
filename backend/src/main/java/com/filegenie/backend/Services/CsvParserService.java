@@ -31,7 +31,7 @@ public class CsvParserService {
             for (String header : headers) {
                 Field field = new Field();
                 field.setName(header);
-                field.setType("VALUE");
+                field.setType(Field.FieldType.PRIMITIVE);
                 fields.add(field);
             }
 

@@ -54,14 +54,14 @@ public class FieldService {
     public void processFieldFromMap(Field parent, Map<String, Object> fieldData) {
         Field field = new Field();
         field.setName((String) fieldData.get("name"));
-        field.setType((String) fieldData.get("type"));
+        field.setType((Field.FieldType) fieldData.get("type"));
         field.setParentField(parent);
 
 
         Optional<Field> existingFieldOptional = fieldRepository.findByName(field.getName());
         if (existingFieldOptional.isPresent()) {
             field = existingFieldOptional.get();
-            field.setType((String) fieldData.get("type"));
+            field.setType((Field.FieldType) fieldData.get("type"));
         } else {
             field = fieldRepository.save(field);
         }
@@ -90,4 +90,10 @@ public class FieldService {
         }
     }
 
+    public void deleteAllFields() {
+        List<Field> fields = fieldRepository.findAll();
+        if (!fields.isEmpty()) {
+            fieldRepository.deleteAll();
+        }
+    }
 }

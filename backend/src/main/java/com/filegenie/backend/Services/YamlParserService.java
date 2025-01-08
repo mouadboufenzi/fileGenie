@@ -38,12 +38,12 @@ public class YamlParserService {
 
             if (value instanceof Map) {
                 // Si la valeur est un objet
-                field.setType("OBJECT");
+                field.setType(Field.FieldType.OBJECT);
                 fields.add(field);
                 fields.addAll(processYamlNode(field, (Map<String, Object>) value));
             } else if (value instanceof List) {
                 // Si la valeur est une liste, ajouter chaque élément en tant que FieldValue
-                field.setType("LIST");
+                field.setType(Field.FieldType.LIST);
                 List<?> list = (List<?>) value;
                 for (Object element : list) {
                     FieldValue fieldValue = new FieldValue();
@@ -53,12 +53,12 @@ public class YamlParserService {
                 }
                 fields.add(field);
             } else {
-                // Si la valeur est un type primitif, la sauvegarder en tant que FieldValue
-                field.setType("VALUE");
+                // If the value is a primitive type, save it as a FieldValue
                 FieldValue fieldValue = new FieldValue();
                 fieldValue.setValue(value.toString());
                 fieldValue.setField(field);
                 field.getFieldValues().add(fieldValue);
+                field.setType(Field.FieldType.PRIMITIVE);
                 fields.add(field);
             }
         });

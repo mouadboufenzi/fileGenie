@@ -39,10 +39,12 @@ public class JsonParserService {
 
                 if (entry.getValue().isObject()) {
                     // Si la valeur est un objet, ce champ contient des sous-champs
+                    field.setType(Field.FieldType.OBJECT);
                     fields.add(field);
                     fields.addAll(processNode(field, entry.getValue()));
                 } else if (entry.getValue().isArray()) {
                     // Si la valeur est un tableau, on ajoute chaque élément comme FieldValue
+                    field.setType(Field.FieldType.LIST);
                     entry.getValue().forEach(arrayElement -> {
                         FieldValue fieldValue = new FieldValue();
                         fieldValue.setValue(arrayElement.asText());
@@ -56,6 +58,7 @@ public class JsonParserService {
                     fieldValue.setValue(entry.getValue().asText());
                     fieldValue.setField(field);
                     field.getFieldValues().add(fieldValue);
+                    field.setType(Field.FieldType.PRIMITIVE);
                     fields.add(field);
                 }
             });
