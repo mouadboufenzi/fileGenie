@@ -10,7 +10,5 @@ function RouteComponent() {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) return <Navigate to="/login" />;
-  return (
-    <>Home page !</>
-  );
+  return <Navigate to="/profile" />;
 }
