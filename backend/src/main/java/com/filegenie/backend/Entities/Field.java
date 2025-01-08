@@ -25,16 +25,16 @@ public class Field {
     @Column(nullable = false, unique = true)
     private String name;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FieldType type;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude // Empêche les récursions infinies
     @JsonIgnore
     private List<FieldValue> fieldValues = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "parent_field_id")
     @ToString.Exclude
     @JsonBackReference
@@ -51,7 +51,7 @@ public class Field {
     private ConfigurationFile configurationFile;
 
     public enum FieldType {
-        VALUE,
+        PRIMITIVE,
         OBJECT,
         LIST,
     }

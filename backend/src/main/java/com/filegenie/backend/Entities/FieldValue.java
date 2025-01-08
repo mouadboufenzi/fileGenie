@@ -27,7 +27,4 @@ public class FieldValue {
     @JoinColumn(name = "field_id", nullable = false)
     @JsonIgnore
     private Field field;
-
-
-
 }

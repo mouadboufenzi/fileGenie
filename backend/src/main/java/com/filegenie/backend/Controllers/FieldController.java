@@ -30,6 +30,12 @@ public class FieldController {
         return fieldRepository.findAll();
     }
 
+    @DeleteMapping(path="/all")
+    public ResponseEntity<Void> deleteFields() {
+        fieldService.deleteAllFields();
+        return ResponseEntity.ok().build();
+    }
+
     // Get root fields (fields without parents)
     @GetMapping("/root")
     public ResponseEntity<List<Field>> getRootFields() {
