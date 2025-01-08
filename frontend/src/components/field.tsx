@@ -8,29 +8,41 @@ import { FieldWithValues } from './fieldContainer';
 
 interface FieldComponentProps {
 	isSubfield?: boolean;
-	field: Field;
+	field: FieldWithValues;
 	selectableFields: Field[];
 
 	onFieldDelete: () => void;
 	onFieldUpdate: (field: Field) => void;
 	onFieldValueUpdate: (field: Field, values: number[]) => void;
+
+  subConfig: FieldWithValues[];
 	onSubFieldChange: (field: Field, config: FieldWithValues[]) => void;
 }
 
-export function FieldComponent({ selectableFields, field, isSubfield, onFieldDelete, onFieldUpdate, onFieldValueUpdate, onSubFieldChange }: FieldComponentProps) {
+export function FieldComponent({ selectableFields, field, isSubfield, onFieldDelete, onFieldUpdate, onFieldValueUpdate, onSubFieldChange, subConfig }: FieldComponentProps) {
   const [selectedField, setSelectedField] = useState<string | null>(field.fieldId.toString());
+  
   const [fieldValues, setFieldValues] = useState<{ id: number; value: string }[]>([]);
+  const [subFieldsValues, setSubFieldsValues] = useState<Field[]>([]);
 
   useEffect(() => {
     if (selectedField === null) setFieldValues([]);
-    else void fetchAPI<{ id: number; value: string }[]>(`/api/field/${selectedField}/values`, 'GET')
-      .then((data) => {
-        if ('error' in data) console.error(data.error);
-        else setFieldValues(data);
-      })
-      .finally(() => {
-        onFieldUpdate(selectableFields.find((f) => f.fieldId.toString() === selectedField) ?? field);
-      });
+    else {
+      void fetchAPI<{ id: number; value: string }[]>(`/api/field/${selectedField}/values`, 'GET')
+        .then((data) => {
+          if ('error' in data) console.error(data.error);
+          else setFieldValues(data);
+        })
+        .finally(() => {
+          onFieldUpdate(selectableFields.find((f) => f.fieldId.toString() === selectedField) ?? field);
+        });
+
+      void fetchAPI<Field[]>(`/api/field/${selectedField}/subfields`, 'GET')
+        .then((data) => {
+          if ('error' in data) console.error(data.error);
+          else setSubFieldsValues(data);
+        });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedField]);
 
@@ -48,10 +60,16 @@ export function FieldComponent({ selectableFields, field, isSubfield, onFieldDel
           }}
         />
         <FieldValueComponent
-          field={field} 
+          field={field}
+          
           fieldValues={fieldValues}
-          onValuesChange={(values) => onFieldValueUpdate(field, values.map((v) => parseInt(v)))}
+          possibleSubFields={subFieldsValues}       
+
+          config={subConfig}
           onConfigChange={(config) => onSubFieldChange(field, config)}
+          
+          values={field.values}
+          onValuesChange={(values) => onFieldValueUpdate(field, values)}
         />
         {field.type !== FieldType.OBJECT && (
           <ActionIcon

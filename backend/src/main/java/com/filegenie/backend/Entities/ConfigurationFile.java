@@ -30,7 +30,7 @@ public class ConfigurationFile extends BaseEntity {
     @Column(nullable = false)
     private ConfigType configType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String ConfigFile;
 
     @ManyToMany(mappedBy = "configurationFiles", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

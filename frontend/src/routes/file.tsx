@@ -35,10 +35,16 @@ function CreateFile() {
   const [isLoading, startTransition] = useTransition();
   const navigate = useNavigate();
 
-  const [config, setConfig] = useState<Config>({});
+  const [config, setConfig] = useState<Config>({ '1.0': [] });
   const [allFields, setAllFields] = useState<Field[]>([]);
 
   const [currentVersion, setCurrentVersion] = useState('1.0');
+  const [currentConfig, setCurrentConfig] = useState<FieldWithValues[]>([]);
+
+  useEffect(() => {
+    setCurrentConfig(config[currentVersion] ?? []);
+  // eslint-disable-next-line
+  }, [currentVersion]);
 
   useEffect(() => {
     if (!fileId) return;
@@ -86,7 +92,13 @@ function CreateFile() {
       form.setFieldValue('configType', type.toUpperCase());
       form.setFieldValue('configVersion', currentVersion);
 
-      console.log(form.getValues(), config);
+      if (Object.keys(config).length > 1) {
+        for (const [version, fields] of Object.entries(config)) {
+          // Remove empty versions
+          // eslint-disable-next-line
+          if (fields.length === 0) delete config[version];
+        }
+      }
 
       void fetchAPI('/api/config/save', 'POST', {
         configurationId: form.getValues().configId,
@@ -116,6 +128,14 @@ function CreateFile() {
           {fileId ? 'Édition' : 'Création'} du fichier de configuration {type.toUpperCase()}
         </Text>
 
+        <TextInput
+          required
+          label="Nom de la configuration"
+          type="text"
+          w="100%"
+          {...form.getInputProps('configurationName')}
+        />
+
         {fileId && (
           <Select
             required
@@ -128,21 +148,17 @@ function CreateFile() {
           />
         )}
 
-        <TextInput
-          required
-          label="Nom de la configuration"
-          type="text"
-          w="100%"
-          {...form.getInputProps('configurationName')}
-        />
-
-        {currentVersion}
+        {/* {currentVersion}
         <br/>
-        {JSON.stringify(config, null, 2)}
+        {JSON.stringify(config, null, 2)} */}
 
         <FieldContainer
           selectableFields={allFields}
-          onConfigChange={(newConfig) => setConfig({ ...config, [currentVersion]: newConfig })}
+          config={currentConfig}
+          onConfigChange={(newConfig) => {
+            setConfig({ ...config, [currentVersion]: newConfig });
+            setCurrentConfig(newConfig);
+          }}
         />
 
         <Button

@@ -1,27 +1,30 @@
 import { MultiSelect, Select } from '@mantine/core';
 import { Field, FieldType } from '../types/field';
-import { useEffect, useState } from 'react';
 import { FieldContainer, FieldWithValues } from './fieldContainer';
 
 interface FieldValueComponentProps {
 	field: Field;
 	fieldValues: { id: number; value: string }[];
-
-	onValuesChange: (values: string[]) => void;
+  possibleSubFields: Field[];
+  config: FieldWithValues[];
 	onConfigChange: (config: FieldWithValues[]) => void;
+
+  values: number[];
+	onValuesChange: (values: number[]) => void;
 }
 
-export function FieldValueComponent({ field, fieldValues, onValuesChange, onConfigChange }: FieldValueComponentProps) {
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+export function FieldValueComponent({ 
+  field, 
+  fieldValues, 
 
-  useEffect(() => {
-    setSelectedValue(null);
-  }, [fieldValues]);
+  values, 
+  onValuesChange, 
 
-  useEffect(() => {
-    onValuesChange(selectedValue ? selectedValue.split(',') : []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedValue]);
+  config, 
+  onConfigChange, 
+
+  possibleSubFields 
+}: FieldValueComponentProps) {
 
   switch (field.type) {
   case FieldType.PRIMITIVE:
@@ -31,9 +34,10 @@ export function FieldValueComponent({ field, fieldValues, onValuesChange, onConf
       searchable
       disabled={fieldValues.length === 0}
       data={fieldValues.map((value) => ({ value: value.id.toString(), label: value.value }))}
-      value={selectedValue}
+      value={values[0]?.toString()}
       onChange={(value) => {
-        setSelectedValue(value ?? null);
+        if (value) onValuesChange([parseInt(value, 10)]);
+        else onValuesChange([]);
       }}
     />;
 
@@ -44,17 +48,18 @@ export function FieldValueComponent({ field, fieldValues, onValuesChange, onConf
       searchable
       disabled={fieldValues.length === 0}
       data={fieldValues.map((value) => ({ value: value.id.toString(), label: value.value }))}
-      value={selectedValue ? selectedValue.split(',') : []}
+      value={values.map((v) => v.toString())}
       onChange={(value) => {
-        setSelectedValue(value.join(','));
+        onValuesChange(value.map(Number));
       }}
     />;
 
   case FieldType.OBJECT:
     return <FieldContainer 
       isSubfield 
-      selectableFields={field.subFields}
+      selectableFields={possibleSubFields}
       onConfigChange={(config) => onConfigChange(config)}
+      config={config}
     />;
 
   default: return null;
