@@ -49,9 +49,7 @@ public class ImportFileController {
             path = "/upload",
             method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addNewField(
-            @RequestParam("file") MultipartFile file,
-            @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> addNewField(@RequestParam("file") MultipartFile file) {
 
         try {
             // Vérification du nom du fichier

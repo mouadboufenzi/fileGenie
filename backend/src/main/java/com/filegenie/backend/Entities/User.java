@@ -42,7 +42,7 @@ public class User extends BaseEntity {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "configuration_file_id")
     )
-    private Set<ConfigurationFile> configurationFiles;
+    private List<ConfigurationFile> configurationFiles;
 
     public enum Role {
         ADMIN,
