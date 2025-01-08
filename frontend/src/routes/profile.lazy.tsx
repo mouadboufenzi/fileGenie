@@ -2,7 +2,6 @@ import { Title, Text, Image, Group, Stack, Button, ActionIcon, Table, TextInput,
 import { createLazyFileRoute, Navigate } from '@tanstack/react-router';
 
 import { useEffect, useState, useTransition } from 'react';
-import { IoMdArrowBack } from 'react-icons/io';
 import { MdLogout } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 

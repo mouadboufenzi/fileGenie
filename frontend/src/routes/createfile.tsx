@@ -1,11 +1,11 @@
-import { createFileRoute, Navigate } from '@tanstack/react-router'
-import { useAuth } from '../auth-provider'
-import { useForm } from '@mantine/form'
-import { Stack, TextInput, Text, Button } from '@mantine/core'
-import { useEffect, useState } from 'react'
-import { Field } from '../types/field'
-import { fetchAPI } from '../utils/fetch'
-import { FieldContainer, FieldWithValues } from '../components/fieldContainer'
+import { createFileRoute, Navigate } from '@tanstack/react-router';
+import { useAuth } from '../auth-provider';
+import { useForm } from '@mantine/form';
+import { Stack, TextInput, Text, Button } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Field } from '../types/field';
+import { fetchAPI } from '../utils/fetch';
+import { FieldContainer, FieldWithValues } from '../components/fieldContainer';
 
 interface SearchParams {
   type: string
@@ -13,28 +13,28 @@ interface SearchParams {
 
 export const Route = createFileRoute('/createfile')({
   component: CreateFile,
-  validateSearch: (search): SearchParams => {
-    if (!search.type) throw new Error('Missing type')
+  validateSearch: (search: Record<string, string>): SearchParams => {
+    if (!search.type) throw new Error('Missing type');
 
     return {
       type: search.type,
-    } as SearchParams
+    };
   },
-})
+});
 
 function CreateFile() {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/profile" />
 
   const [allFields, setAllFields] = useState<Field[]>([]);
+  /* eslint-disable-next-line */
   const { type } = Route.useSearch() as SearchParams;
 
   useEffect(() => {
     void fetchAPI<Field[]>('/api/field/all', 'GET').then((data) => {
-      if ('error' in data) console.error(data.error)
-      else setAllFields(data)
-    })
-  }, [])
+      if ('error' in data) console.error(data.error);
+      else setAllFields(data);
+    });
+  }, []);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -42,17 +42,19 @@ function CreateFile() {
       configurationName: '',
       configType: '',
     },
-  })
+  });
 
   const handleSubmit = () => {
     form.setFieldValue('configType', type);
     
     // TODO: integrate with the backend
     console.log(form.getValues(), config);
-  }
+  };
 
   // TODO: integrate with the backend
-  const [config, setConfig] = useState<FieldWithValues[]>([])
+  const [config, setConfig] = useState<FieldWithValues[]>([]);
+
+  if (!isAuthenticated) return <Navigate to="/profile" />;
 
   return (
     <form onSubmit={form.onSubmit(() => handleSubmit())}>
@@ -65,7 +67,7 @@ function CreateFile() {
         align="center"
       >
         <Text fw={500} size="lg" mb="md">
-         Fichier de configuration {type.toUpperCase()}
+          Fichier de configuration {type.toUpperCase()}
         </Text>
         <TextInput
           required
@@ -90,5 +92,5 @@ function CreateFile() {
         </Button>
       </Stack>
     </form>
-  )
+  );
 }

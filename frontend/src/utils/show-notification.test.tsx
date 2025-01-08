@@ -22,7 +22,6 @@ describe('showNotification', () => {
       message: expect.anything(),
       icon: <IoIosCheckmark size={80} />,
       color: 'green',
-      time: 2000,
       bg: 'dark',
     });
   });
@@ -36,7 +35,6 @@ describe('showNotification', () => {
       message: expect.anything(),
       icon: <IoIosClose size={80} />,
       color: 'red',
-      time: 2000,
       bg: 'dark',
     });
   });
