@@ -64,8 +64,8 @@ function CreateFile() {
         justify="start"
         align="center"
       >
-        <Text fw="400" size="md">
-          Générer un fichier de configuration {type.toUpperCase()}
+        <Text fw={500} size="lg" mb="md">
+         Fichier de configuration {type.toUpperCase()}
         </Text>
         <TextInput
           required

@@ -1,5 +1,5 @@
 import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Group, Card, Image, Text, Container } from '@mantine/core';
+import { Group, Card, Image, Text, Container, Stack } from '@mantine/core';
 
 export const Route = createLazyFileRoute('/typefile')({
   component: RouteComponent,
@@ -13,21 +13,29 @@ function RouteComponent() {
   };
 
   return (
-    <Container style={{ marginTop: '5rem', textAlign: 'center' }}>
+    <Stack
+      maw="800"
+      ml="auto"
+      mr="auto"
+      h="calc(100vh - 150px - (2 * var(--mantine-spacing-md)))"
+      justify="center"
+      align="center"
+    >
       <Text fw={500} size="lg" mb="md">
         Quel type de fichier voulez-vous générer ?
       </Text>
-      <Group align="center" gap="xl" justify="center">
+      <Group align="center" gap="3rem" justify="center">
         {/* JSON */}
         <Card
           shadow="sm"
           radius="md"
           withBorder
-          style={{ width: '140px', margin: '1rem', textAlign: 'center', cursor: 'pointer' }}
+          w="140"
+          style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-yellow-text)' }}
           onClick={() => handleClick('json')}
         >
           <Image src="/Json.png" alt="JSON" height={60} fit="contain" />
-          <Text c="orange" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
+          <Text c="yellow" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
             JSON
           </Text>
         </Card>
@@ -37,7 +45,8 @@ function RouteComponent() {
           shadow="sm"
           radius="md"
           withBorder
-          style={{ width: '140px', margin: '1rem', textAlign: 'center', cursor: 'pointer' }}
+          w="140"
+          style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-red-text)' }}
           onClick={() => handleClick('xml')}
         >
           <Image src="/XML.png" alt="XML" height={60} fit="contain" />
@@ -52,7 +61,8 @@ function RouteComponent() {
             shadow="sm"
             radius="md"
             withBorder
-            style={{ width: '140px', margin: '1rem', textAlign: 'center', cursor: 'pointer' }}
+            w="140"
+            style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-green-text)' }}
           >
             <Image src="/csv.png" alt="CSV" height={60} fit="contain" />
             <Text c="green" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
@@ -66,15 +76,16 @@ function RouteComponent() {
           shadow="sm"
           radius="md"
           withBorder
-          style={{ width: '140px', margin: '1rem', textAlign: 'center', cursor: 'pointer' }}
+          w="140"
+          style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-violet-text)' }}
           onClick={() => handleClick('yml')}
         >
           <Image src="/yml.png" alt="YML" height={60} fit="contain" />
-          <Text c="purple" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
-            YML
+          <Text c="violet" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
+            YAML
           </Text>
         </Card>
       </Group>
-    </Container>
+    </Stack>
   );
 }
