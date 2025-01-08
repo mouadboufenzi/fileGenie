@@ -3,7 +3,7 @@ import { useAuth } from '../auth-provider';
 import { useForm } from '@mantine/form';
 import { Stack, TextInput, Text, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { Field } from '../types/field';
+import { Field, FieldType } from '../types/field';
 import { fetchAPI } from '../utils/fetch';
 import { FieldContainer, FieldWithValues } from '../components/fieldContainer';
 
@@ -32,9 +32,9 @@ function CreateFile() {
   useEffect(() => {
     void fetchAPI<Field[]>('/api/field/all', 'GET').then((data) => {
       if ('error' in data) console.error(data.error);
-      else setAllFields(data);
+      else setAllFields(data.filter((f) => type === 'csv' ? f.type === FieldType.PRIMITIVE : true));
     });
-  }, []);
+  }, [type]);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -45,7 +45,7 @@ function CreateFile() {
   });
 
   const handleSubmit = () => {
-    form.setFieldValue('configType', type);
+    form.setFieldValue('configType', type.toUpperCase());
     
     // TODO: integrate with the backend
     console.log(form.getValues(), config);

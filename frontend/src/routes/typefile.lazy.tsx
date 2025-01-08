@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { Group, Card, Image, Text, Stack } from '@mantine/core';
 
 export const Route = createLazyFileRoute('/typefile')({
@@ -56,20 +56,19 @@ function RouteComponent() {
         </Card>
 
         {/* CSV */}
-        <Link to="/csv">
-          <Card
-            shadow="sm"
-            radius="md"
-            withBorder
-            w="140"
-            style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-green-text)' }}
-          >
-            <Image src="/csv.png" alt="CSV" height={60} fit="contain" />
-            <Text c="green" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
-              CSV
-            </Text>
-          </Card>
-        </Link>
+        <Card
+          shadow="sm"
+          radius="md"
+          withBorder
+          w="140"
+          style={{ cursor: 'pointer', borderColor: 'var(--mantine-color-green-text)' }}
+          onClick={() => handleClick('csv')}
+        >
+          <Image src="/csv.png" alt="CSV" height={60} fit="contain" />
+          <Text c="green" ta="center" style={{ fontWeight: 600, marginTop: '0.5rem' }}>
+            CSV
+          </Text>
+        </Card>
 
         {/* YML */}
         <Card
