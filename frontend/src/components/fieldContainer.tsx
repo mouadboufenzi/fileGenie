@@ -21,7 +21,8 @@ export function FieldContainer({ isSubfield, selectableFields, onConfigChange }:
 
   useEffect(() => {
     onConfigChange(config);
-  }, [config, onConfigChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config]);
 
   return (
     <Card w="100%" withBorder>

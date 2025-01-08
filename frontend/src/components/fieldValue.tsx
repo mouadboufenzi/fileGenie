@@ -20,7 +20,8 @@ export function FieldValueComponent({ field, fieldValues, onValuesChange, onConf
 
   useEffect(() => {
     onValuesChange(selectedValue ? selectedValue.split(',') : []);
-  }, [selectedValue, onValuesChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedValue]);
 
   switch (field.type) {
   case FieldType.PRIMITIVE:

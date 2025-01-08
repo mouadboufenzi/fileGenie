@@ -31,7 +31,8 @@ export function FieldComponent({ selectableFields, field, isSubfield, onFieldDel
       .finally(() => {
         onFieldUpdate(selectableFields.find((f) => f.fieldId.toString() === selectedField) ?? field);
       });
-  }, [selectedField, onFieldUpdate, selectableFields, field]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedField]);
 
   return (
     <Card withBorder>
