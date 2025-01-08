@@ -1,14 +1,17 @@
 package com.filegenie.backend.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 @Data
 @Entity
@@ -25,15 +28,12 @@ public class ConfigurationFile extends BaseEntity {
     private String configName;
 
     @Column(nullable = false)
-    private String configVersion;
-
-    @Column(nullable = false)
     private ConfigType configType;
 
     @Column(nullable = false)
     private String ConfigFile;
 
-    @ManyToMany(mappedBy = "configurationFiles", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "configurationFiles", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JsonIgnore
     private List<User> users;
 

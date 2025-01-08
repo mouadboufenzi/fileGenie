@@ -1,8 +1,8 @@
 import { Title, Text, Image, Group, Stack, Button, ActionIcon, Table, TextInput, Card } from '@mantine/core';
-import { createLazyFileRoute, Navigate } from '@tanstack/react-router';
+import { createLazyFileRoute, Navigate, useNavigate } from '@tanstack/react-router';
 
 import { useEffect, useState, useTransition } from 'react';
-import { MdLogout } from 'react-icons/md';
+import { MdChevronRight, MdLogout } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 
 import { useAuth } from '../auth-provider';
@@ -12,6 +12,9 @@ import { LuClock3 } from 'react-icons/lu';
 import { useForm } from '@mantine/form';
 import { showNotification } from '../utils/show-notification';
 import { GenericMessage } from '../types/genericMessage';
+import { ConfigurationFile } from '../types/config';
+import { IoMdClose } from 'react-icons/io';
+import { Config } from './file';
 
 export const Route = createLazyFileRoute('/profile')({
   component: RouteComponent,
@@ -23,6 +26,7 @@ function RouteComponent() {
   const [user, setUser] = useState<UserInfo | null>(null);
 
   const [isEditing, setEditing] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -40,13 +44,21 @@ function RouteComponent() {
     void fetchAPI<UserInfo>('/api/user/info', 'GET')
       .then((data) => {
         if ('userId' in data) {
-          data.files = []; // TODO remove this once implemented
+          void fetchAPI<ConfigurationFile[]>(`/api/config/${data.userId.toString()}/configs`, 'GET')
+            .then((files) => {
+              if ('error' in files) console.error(files.error);
+              else {
+                data.files = files;
+                
+                setUser(data);
+                form.setValues({
+                  email: data.email,
+                  name: data.name,
+                });
 
-          setUser(data);
-          form.setValues({
-            email: data.email,
-            name: data.name,
-          });
+                console.log(data);
+              }
+            });
         }
       });
   };
@@ -67,6 +79,24 @@ function RouteComponent() {
           }
         });
     });
+  };
+
+  const handleFileClick = (file: ConfigurationFile) => {
+    void navigate({ to: '/file', search: { type: file.configType, fileId: file.configId } });
+  };
+
+  const handleNewConfigClick = () => {
+    void navigate({ to: '/select' });
+  };
+
+  const handleFileDelete = (configId: number) => {
+    void fetchAPI<GenericMessage>(`/api/config/${configId.toString()}`, 'DELETE')
+      .then((data) => {
+        if (!('error' in data)) {
+          showNotification(data.message);
+          getUserData();
+        }
+      });
   };
 
   if (!isAuthenticated) return <Navigate to="/login" />;
@@ -139,7 +169,7 @@ function RouteComponent() {
                 <LuClock3 color="rgb(121, 80, 242)" size="20" />
                 <Title order={3} c="violet" ff="Archivo">Historique de générations</Title>
               </Group>
-              <Button color="violet" w="200" onClick={() => window.location.href = '/typefile'}>Nouvelle configuration</Button>
+              <Button color="violet" w="200" onClick={() => handleNewConfigClick()}>Nouvelle configuration</Button>
             </Group>
 
             {user?.files.length === 0 && (
@@ -152,14 +182,48 @@ function RouteComponent() {
                   <Table.Tr>
                     <Table.Th>Créateur</Table.Th>
                     <Table.Th>Nom du fichier</Table.Th>
+                    <Table.Th>Nombre de versions</Table.Th>
                     <Table.Th>Type de configuration</Table.Th>
-                    <Table.Th>Version</Table.Th>
-                    <Table.Th>Date de création</Table.Th>
                     <Table.Th>Actions</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  TODO
+                  {user.files.map((file) => (
+                    <Table.Tr key={file.configId} p="0">
+                      <Table.Td p="5">{user.name}</Table.Td>
+                      <Table.Td p="5">{file.configName}</Table.Td>
+                      <Table.Td p="5">{Object.keys(JSON.parse(file.configFile) as Config).length}</Table.Td>
+                      <Table.Td p="5">
+                        <Group gap="5">
+                          <Image src={`/${file.configType.toLowerCase()}.png`} alt="CSV" height={35} fit="contain" />
+                          {file.configType}
+                        </Group>
+                      </Table.Td>
+                      <Table.Td p="5" w="calc(130px + 36px + 5px)" >
+                        <Group gap="5" wrap="nowrap">
+                          <Button
+                            w="130"
+                            color="violet" 
+                            variant="light" 
+                            onClick={() => handleFileClick(file)}
+                            rightSection={<MdChevronRight />}
+                            justify="space-between"
+                          >
+                            Voir
+                          </Button>
+                          <ActionIcon 
+                            w="36" 
+                            h="36" 
+                            color="red" 
+                            variant="light" 
+                            onClick={() => handleFileDelete(file.configId)}
+                          >
+                            <IoMdClose />
+                          </ActionIcon>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
                 </Table.Tbody>
               </Table>
             )}

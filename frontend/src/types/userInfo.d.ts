@@ -1,12 +1,11 @@
+import { ConfigurationFile } from './config';
 
 export interface UserInfo {
 	userId: number;
 	email: string;
 	name: string;
 	role: userRole;
-
-	// TODO: implement this
-	files: unknown[];
+	files: ConfigurationFile[];
 }
 
 export type userRole = 'ADMIN' | 'USER';

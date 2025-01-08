@@ -2,6 +2,7 @@ package com.filegenie.backend.Controllers;
 
 import com.filegenie.backend.DTO.EditConfiguration;
 import com.filegenie.backend.DTO.GenericResponse;
+import com.filegenie.backend.DTO.HttpException;
 import com.filegenie.backend.Entities.ConfigurationFile;
 import com.filegenie.backend.Entities.User;
 import com.filegenie.backend.Entities.UserSession;
@@ -45,7 +46,13 @@ public class ConfigFileController {
             }
 
             User user = sessionOpt.get().getUser();
-            configFileService.saveConfigFile(user, infos);
+
+            try {
+                configFileService.saveConfigFile(user, infos);
+            } catch (HttpException e) {
+                return new ResponseEntity<>(e, e.getStatus());
+            }
+
             GenericResponse res = new GenericResponse();
             res.setMessage("Configuration sauvegardée");
             return ResponseEntity.ok(res);
@@ -57,5 +64,65 @@ public class ConfigFileController {
     @GetMapping("/{userId}/configs")
     public ResponseEntity<List<ConfigurationFile>> getConfigurationFilesOfUser(@PathVariable Long userId) {
         return ResponseEntity.ok(configFileService.getAllConfigurationOfUser(userId));
+    }
+
+    @DeleteMapping("/{configId}")
+    public ResponseEntity<?> deleteConfigById(
+            @PathVariable Long configId,
+            @Parameter(hidden = true) // hidden in Swagger
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        // find the current user based on it's token inside the header
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            Optional<UserSession> sessionOpt = userSessionRepository.findBySessionToken(token);
+
+            // user not found
+            if (sessionOpt.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            User user = sessionOpt.get().getUser();
+
+            try {
+                configFileService.deleteConfigurationFileById(configId, user);
+
+                GenericResponse res = new GenericResponse();
+                res.setMessage("Configuration supprimée");
+                return ResponseEntity.ok(res);
+
+            } catch (HttpException e) {
+                return new ResponseEntity<>(e, e.getStatus());
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/data/{configId}")
+    public ResponseEntity<?> getConfigurationFileById(
+            @PathVariable Long configId,
+            @Parameter(hidden = true) // hidden in Swagger
+            @RequestHeader("Authorization") String authHeader
+    ) {
+
+        // find the current user based on it's token inside the header
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            Optional<UserSession> sessionOpt = userSessionRepository.findBySessionToken(token);
+
+            // user not found
+            if (sessionOpt.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            User user = sessionOpt.get().getUser();
+            try {
+                return ResponseEntity.ok(configFileService.getConfigurationFileById(configId, user));
+            } catch (HttpException e) {
+                return new ResponseEntity<>(e, e.getStatus());
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
