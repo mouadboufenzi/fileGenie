@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as CreatefileImport } from './routes/createfile'
 
 // Create Virtual Routes
 
@@ -21,7 +22,6 @@ const RegisterLazyImport = createFileRoute('/register')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const LoginLazyImport = createFileRoute('/login')()
 const CsvLazyImport = createFileRoute('/csv')()
-const CreatefileLazyImport = createFileRoute('/createfile')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -56,11 +56,11 @@ const CsvLazyRoute = CsvLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/csv.lazy').then((d) => d.Route))
 
-const CreatefileLazyRoute = CreatefileLazyImport.update({
+const CreatefileRoute = CreatefileImport.update({
   id: '/createfile',
   path: '/createfile',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/createfile.lazy').then((d) => d.Route))
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -83,7 +83,7 @@ declare module '@tanstack/react-router' {
       id: '/createfile'
       path: '/createfile'
       fullPath: '/createfile'
-      preLoaderRoute: typeof CreatefileLazyImport
+      preLoaderRoute: typeof CreatefileImport
       parentRoute: typeof rootRoute
     }
     '/csv': {
@@ -128,7 +128,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/createfile': typeof CreatefileLazyRoute
+  '/createfile': typeof CreatefileRoute
   '/csv': typeof CsvLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -138,7 +138,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/createfile': typeof CreatefileLazyRoute
+  '/createfile': typeof CreatefileRoute
   '/csv': typeof CsvLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -149,7 +149,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/createfile': typeof CreatefileLazyRoute
+  '/createfile': typeof CreatefileRoute
   '/csv': typeof CsvLazyRoute
   '/login': typeof LoginLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -190,7 +190,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  CreatefileLazyRoute: typeof CreatefileLazyRoute
+  CreatefileRoute: typeof CreatefileRoute
   CsvLazyRoute: typeof CsvLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
@@ -200,7 +200,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  CreatefileLazyRoute: CreatefileLazyRoute,
+  CreatefileRoute: CreatefileRoute,
   CsvLazyRoute: CsvLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
@@ -231,7 +231,7 @@ export const routeTree = rootRoute
       "filePath": "index.lazy.tsx"
     },
     "/createfile": {
-      "filePath": "createfile.lazy.tsx"
+      "filePath": "createfile.tsx"
     },
     "/csv": {
       "filePath": "csv.lazy.tsx"
