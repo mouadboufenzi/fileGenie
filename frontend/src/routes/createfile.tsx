@@ -79,9 +79,6 @@ function CreateFile() {
 
         {/* {JSON.stringify(fields, null, 2)} */}
 
-        <Text fw="500" ta="left" w="100%" lh="1.55" size="sm" mb="-12">
-          Champs de la configuration
-        </Text>
         <FieldContainer
           selectableFields={allFields}
           onConfigChange={(config) => setConfig(config)}
