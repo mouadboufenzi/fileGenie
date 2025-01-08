@@ -1,5 +1,5 @@
 import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
-import { Group, Card, Image, Text, Container, Stack } from '@mantine/core';
+import { Group, Card, Image, Text, Stack } from '@mantine/core';
 
 export const Route = createLazyFileRoute('/typefile')({
   component: RouteComponent,
