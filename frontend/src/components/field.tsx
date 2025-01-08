@@ -72,7 +72,7 @@ export function FieldComponent({ selectableFields, field, isSubfield, onFieldDel
             rightSection={<IoMdClose />}
             justify="space-between"
           >
-						Supprimer
+						Supprimer le {isSubfield ? 'sous-champ' : 'champ'}
           </Button>
         )}
       </Group>

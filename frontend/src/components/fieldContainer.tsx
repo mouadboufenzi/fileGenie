@@ -1,4 +1,4 @@
-import { Card, Stack, Button } from '@mantine/core';
+import { Card, Stack, Button, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Field, FieldType } from '../types/field';
@@ -25,47 +25,52 @@ export function FieldContainer({ isSubfield, selectableFields, onConfigChange }:
   }, [config]);
 
   return (
-    <Card w="100%" withBorder>
-      <Stack>
-        {fields.map((field) => (
-          <FieldComponent
-            isSubfield={isSubfield}
-            selectableFields={selectableFields}
-            key={field.fieldId}
-            field={field}
+    <Stack w="100%">
+      <Text fw="500" ta="left" w="100%" lh="1.55" size="sm" mb="-12">
+        {isSubfield ? 'Sous-champ(s)' : 'Champ(s) de la configuration'}
+      </Text>
+      <Card w="100%" withBorder={isSubfield} p={isSubfield ? 'md' : 0}>
+        <Stack>
+          {fields.map((field) => (
+            <FieldComponent
+              isSubfield={isSubfield}
+              selectableFields={selectableFields}
+              key={field.fieldId}
+              field={field}
 
-            onFieldDelete={() => {
-              setFields(fields.filter((f) => f.fieldId !== field.fieldId));
-              setConfig(config.filter((f) => f.fieldId !== field.fieldId));
-            }}
-            onFieldUpdate={(newField) => {
-              setFields(fields.map((f) => f.fieldId === field.fieldId ? newField : f));
-              setConfig(config.map((f) => f.fieldId === field.fieldId ? { ...newField, values: [], subFields: [] } : f));
-            }}
-            onFieldValueUpdate={(field, values) => {
-              setConfig(config.map((f) => f.fieldId === field.fieldId ? { ...f, values } : f));
-            }}
+              onFieldDelete={() => {
+                setFields(fields.filter((f) => f.fieldId !== field.fieldId));
+                setConfig(config.filter((f) => f.fieldId !== field.fieldId));
+              }}
+              onFieldUpdate={(newField) => {
+                setFields(fields.map((f) => f.fieldId === field.fieldId ? newField : f));
+                setConfig(config.map((f) => f.fieldId === field.fieldId ? { ...newField, values: [], subFields: [] } : f));
+              }}
+              onFieldValueUpdate={(field, values) => {
+                setConfig(config.map((f) => f.fieldId === field.fieldId ? { ...f, values } : f));
+              }}
 
-            onSubFieldChange={(ff, subFields) => {
-              setConfig(config.map((f) => f.fieldId === ff.fieldId ? { ...f, subFields } : f));
-            }}
-          />
-        ))}
+              onSubFieldChange={(ff, subFields) => {
+                setConfig(config.map((f) => f.fieldId === ff.fieldId ? { ...f, subFields } : f));
+              }}
+            />
+          ))}
 
-        <Button
-          fullWidth
-          variant='outline'
-          onClick={() => {
-            setFields([...fields, { fieldId: -1, type: FieldType.PRIMITIVE, name: '', subFields: [] }]);
-            setConfig([...config, { fieldId: -1, type: FieldType.PRIMITIVE, name: '', subFields: [], values: [] }]);
-          }}
-          rightSection={<MdAdd />}
-          justify="space-between"
-          color="violet"
-        >
-          {isSubfield ? 'Ajouter un sous-champ' : 'Ajouter un champ'}
-        </Button>
-      </Stack>
-    </Card>
+          <Button
+            fullWidth
+            variant='outline'
+            onClick={() => {
+              setFields([...fields, { fieldId: -1, type: FieldType.PRIMITIVE, name: '', subFields: [] }]);
+              setConfig([...config, { fieldId: -1, type: FieldType.PRIMITIVE, name: '', subFields: [], values: [] }]);
+            }}
+            rightSection={<MdAdd />}
+            justify="space-between"
+            color="violet"
+          >
+            {isSubfield ? 'Ajouter un sous-champ' : 'Ajouter un champ'}
+          </Button>
+        </Stack>
+      </Card>
+    </Stack>
   );
 }
